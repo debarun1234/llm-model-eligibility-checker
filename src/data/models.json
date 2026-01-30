@@ -1,0 +1,374 @@
+[
+    {
+        "id": "llama-3-1-405b-instruct",
+        "name": "Meta Llama 3.1 405B Instruct",
+        "family": "Llama 3.1",
+        "size_params": "405B",
+        "quantization": "Q2_K",
+        "req_vram_gb": 80,
+        "req_ram_gb": 320,
+        "description": "Flagship open-weight model. Requires multi-GPU server-class hardware.",
+        "tags": [
+            "enterprise",
+            "reasoning",
+            "coding"
+        ],
+        "min_score": 100
+    },
+    {
+        "id": "llama-3-1-70b-instruct-q4",
+        "name": "Meta Llama 3.1 70B Instruct (4-bit)",
+        "family": "Llama 3.1",
+        "size_params": "70B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 40,
+        "req_ram_gb": 48,
+        "description": "GPT-4 class intelligence. Excellent reasoning and coding. Needs dual high-end GPUs or Mac Studio.",
+        "tags": [
+            "expert",
+            "reasoning",
+            "coding"
+        ],
+        "min_score": 90
+    },
+    {
+        "id": "llama-3-1-8b-instruct-q5",
+        "name": "Meta Llama 3.1 8B Instruct (5-bit)",
+        "family": "Llama 3.1",
+        "size_params": "8B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 12,
+        "description": "Latest Llama 3.1 with extended 128k context. Perfect daily driver.",
+        "tags": [
+            "chat",
+            "general",
+            "fast"
+        ],
+        "min_score": 40
+    },
+    {
+        "id": "llama-3-8b-instruct-q4",
+        "name": "Meta Llama 3 8B Instruct (4-bit)",
+        "family": "Llama 3",
+        "size_params": "8B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 6,
+        "req_ram_gb": 8,
+        "description": "Widely used, fast, and capable. Good for most tasks.",
+        "tags": [
+            "chat",
+            "general",
+            "fast"
+        ],
+        "min_score": 30
+    },
+    {
+        "id": "mixtral-8x7b-instruct-q4",
+        "name": "Mixtral 8x7B Instruct v0.1 (4-bit)",
+        "family": "Mistral",
+        "size_params": "47B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 26,
+        "req_ram_gb": 32,
+        "description": "Mixture of Experts architecture. Fast inference with GPT-3.5 level quality.",
+        "tags": [
+            "balanced",
+            "coding",
+            "reasoning"
+        ],
+        "min_score": 75
+    },
+    {
+        "id": "mixtral-8x22b-instruct-q3",
+        "name": "Mixtral 8x22B Instruct (3-bit)",
+        "family": "Mistral",
+        "size_params": "141B",
+        "quantization": "Q3_K_M",
+        "req_vram_gb": 60,
+        "req_ram_gb": 96,
+        "description": "Largest Mixtral. Extremely powerful but resource-intensive.",
+        "tags": [
+            "expert",
+            "coding",
+            "reasoning"
+        ],
+        "min_score": 95
+    },
+    {
+        "id": "mistral-7b-instruct-v0.3-q5",
+        "name": "Mistral 7B Instruct v0.3 (5-bit)",
+        "family": "Mistral",
+        "size_params": "7B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 12,
+        "description": "Reliable workhorse. Good balance of speed and intelligence.",
+        "tags": [
+            "general",
+            "standard"
+        ],
+        "min_score": 35
+    },
+    {
+        "id": "mistral-nemo-12b-q4",
+        "name": "Mistral Nemo 12B Instruct (4-bit)",
+        "family": "Mistral",
+        "size_params": "12B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 10,
+        "req_ram_gb": 16,
+        "description": "Mistral's latest mid-size model with 128k context.",
+        "tags": [
+            "general",
+            "creative"
+        ],
+        "min_score": 50
+    },
+    {
+        "id": "gemma-2-27b-it-q4",
+        "name": "Google Gemma 2 27B Instruct (4-bit)",
+        "family": "Gemma",
+        "size_params": "27B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 18,
+        "req_ram_gb": 24,
+        "description": "Google's largest open model. Excellent reasoning.",
+        "tags": [
+            "reasoning",
+            "creative"
+        ],
+        "min_score": 70
+    },
+    {
+        "id": "gemma-2-9b-it-q4",
+        "name": "Google Gemma 2 9B Instruct (4-bit)",
+        "family": "Gemma",
+        "size_params": "9B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 12,
+        "description": "Punches above its weight. Great for constrained hardware.",
+        "tags": [
+            "reasoning",
+            "creative",
+            "general"
+        ],
+        "min_score": 40
+    },
+    {
+        "id": "gemma-2-2b-it-q5",
+        "name": "Google Gemma 2 2B Instruct (5-bit)",
+        "family": "Gemma",
+        "size_params": "2B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 3,
+        "req_ram_gb": 4,
+        "description": "Tiny but capable. Runs on almost any hardware.",
+        "tags": [
+            "mobile",
+            "fast",
+            "low-resource"
+        ],
+        "min_score": 5
+    },
+    {
+        "id": "phi-3-medium-128k-q4",
+        "name": "Microsoft Phi-3 Medium 14B (4-bit)",
+        "family": "Phi",
+        "size_params": "14B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 10,
+        "req_ram_gb": 14,
+        "description": "Microsoft's mid-tier model with impressive capabilities.",
+        "tags": [
+            "reasoning",
+            "general"
+        ],
+        "min_score": 50
+    },
+    {
+        "id": "phi-3-mini-128k-q4",
+        "name": "Microsoft Phi-3 Mini 3.8B (4-bit)",
+        "family": "Phi",
+        "size_params": "3.8B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 4,
+        "req_ram_gb": 6,
+        "description": "Punching way above its weight class. Runs on almost anything.",
+        "tags": [
+            "mobile",
+            "fast",
+            "low-resource"
+        ],
+        "min_score": 10
+    },
+    {
+        "id": "qwen-2-72b-instruct-q4",
+        "name": "Qwen 2 72B Instruct (4-bit)",
+        "family": "Qwen",
+        "size_params": "72B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 42,
+        "req_ram_gb": 48,
+        "description": "Alibaba's flagship. Strong multilingual and coding abilities.",
+        "tags": [
+            "coding",
+            "multilingual",
+            "reasoning"
+        ],
+        "min_score": 88
+    },
+    {
+        "id": "qwen-2-7b-instruct-q5",
+        "name": "Qwen 2 7B Instruct (5-bit)",
+        "family": "Qwen",
+        "size_params": "7B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 10,
+        "description": "Efficient multilingual model.",
+        "tags": [
+            "multilingual",
+            "general"
+        ],
+        "min_score": 35
+    },
+    {
+        "id": "command-r-plus-104b-q3",
+        "name": "Cohere Command R+ 104B (3-bit)",
+        "family": "Command R",
+        "size_params": "104B",
+        "quantization": "Q3_K_M",
+        "req_vram_gb": 48,
+        "req_ram_gb": 64,
+        "description": "Optimized for RAG and tool use. Enterprise-grade.",
+        "tags": [
+            "rag",
+            "enterprise",
+            "reasoning"
+        ],
+        "min_score": 92
+    },
+    {
+        "id": "command-r-35b-q4",
+        "name": "Cohere Command R 35B (4-bit)",
+        "family": "Command R",
+        "size_params": "35B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 22,
+        "req_ram_gb": 28,
+        "description": "Strong retrieval and reasoning capabilities.",
+        "tags": [
+            "rag",
+            "general"
+        ],
+        "min_score": 70
+    },
+    {
+        "id": "deepseek-coder-v2-236b-q2",
+        "name": "DeepSeek Coder V2 236B (2-bit)",
+        "family": "DeepSeek",
+        "size_params": "236B",
+        "quantization": "Q2_K",
+        "req_vram_gb": 70,
+        "req_ram_gb": 160,
+        "description": "Massive coding-focused model. Requires server hardware.",
+        "tags": [
+            "coding",
+            "dev"
+        ],
+        "min_score": 98
+    },
+    {
+        "id": "deepseek-coder-33b-q4",
+        "name": "DeepSeek Coder 33B Instruct (4-bit)",
+        "family": "DeepSeek",
+        "size_params": "33B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 20,
+        "req_ram_gb": 28,
+        "description": "Top-tier coding specialist. Matches GPT-4 on code.",
+        "tags": [
+            "coding",
+            "dev"
+        ],
+        "min_score": 72
+    },
+    {
+        "id": "codellama-34b-instruct-q4",
+        "name": "Code Llama 34B Instruct (4-bit)",
+        "family": "Code Llama",
+        "size_params": "34B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 22,
+        "req_ram_gb": 28,
+        "description": "Meta's specialized coding model.",
+        "tags": [
+            "coding",
+            "dev"
+        ],
+        "min_score": 68
+    },
+    {
+        "id": "codellama-13b-instruct-q5",
+        "name": "Code Llama 13B Instruct (5-bit)",
+        "family": "Code Llama",
+        "size_params": "13B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 12,
+        "req_ram_gb": 16,
+        "description": "Good coding assistant for mid-range hardware.",
+        "tags": [
+            "coding",
+            "dev"
+        ],
+        "min_score": 50
+    },
+    {
+        "id": "wizardlm-2-8x22b-q3",
+        "name": "WizardLM 2 8x22B (3-bit)",
+        "family": "WizardLM",
+        "size_params": "141B",
+        "quantization": "Q3_K_M",
+        "req_vram_gb": 58,
+        "req_ram_gb": 96,
+        "description": "Uncensored powerhouse. Excellent creative writing.",
+        "tags": [
+            "creative",
+            "reasoning",
+            "uncensored"
+        ],
+        "min_score": 94
+    },
+    {
+        "id": "yi-34b-chat-q4",
+        "name": "Yi 34B Chat (4-bit)",
+        "family": "Yi",
+        "size_params": "34B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 22,
+        "req_ram_gb": 28,
+        "description": "Strong bilingual (EN/CN) model.",
+        "tags": [
+            "multilingual",
+            "general"
+        ],
+        "min_score": 68
+    },
+    {
+        "id": "solar-10.7b-instruct-q5",
+        "name": "Solar 10.7B Instruct (5-bit)",
+        "family": "Solar",
+        "size_params": "10.7B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 10,
+        "req_ram_gb": 14,
+        "description": "Compact but powerful. Good efficiency.",
+        "tags": [
+            "general",
+            "fast"
+        ],
+        "min_score": 45
+    }
+]

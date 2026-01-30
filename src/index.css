@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #13131f;
+  --accent-primary: #00f3ff;
+  /* Cyan Neon */
+  --accent-secondary: #7000ff;
+  /* Purple Neon */
+  --accent-success: #00ff9d;
+  --accent-warning: #ffbd00;
+  --accent-error: #ff3e3e;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-container {
+  background: radial-gradient(circle at top right, rgba(112, 0, 255, 0.1), transparent 40%),
+    radial-gradient(circle at bottom left, rgba(0, 243, 255, 0.1), transparent 40%);
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.neon-btn {
+  background: transparent;
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.neon-btn:hover {
+  background: var(--accent-primary);
+  color: #000;
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+}
+
+.neon-input,
+.neon-select {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.neon-select option {
+  background-color: var(--bg-secondary);
+}
+
+.neon-input:focus,
+.neon-select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.1);
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 5px var(--accent-primary);
+  }
+
+  50% {
+    box-shadow: 0 0 20px var(--accent-primary);
+  }
+
+  100% {
+    box-shadow: 0 0 5px var(--accent-primary);
+  }
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
