@@ -86,31 +86,79 @@ export function analyzeHardware(systemData, userIntent, formFactor = 'laptop', u
         if (!intentMatch) return;
 
         let modelFit = 'bad';
-        if (isAppleSilicon) {
-            const availableForModel = totalRamGB * 0.75;
 
-            if (availableForModel >= model.req_ram_gb * 1.5) {
+        // APPLE SILICON: Unified memory architecture
+        if (isAppleSilicon) {
+            // Apple Silicon uses unified memory efficiently
+            // Neural Engine + GPU share RAM pool
+            // More efficient than discrete GPU systems
+            const availableForModel = totalRamGB * 0.80; // 80% usable (macOS is efficient)
+
+            if (availableForModel >= model.req_ram_gb * 1.6) {
+                // 60% headroom = best performance
                 modelFit = 'best';
+            } else if (availableForModel >= model.req_ram_gb * 1.2) {
+                // 20% headroom = good performance
+                modelFit = 'good';
             } else if (availableForModel >= model.req_ram_gb) {
-                modelFit = 'good';
-            } else {
+                // Meets minimum = bad (will work but slow)
                 modelFit = 'bad';
+            } else {
+                // Can't fit = skip this model
+                return;
             }
+
+            // WINDOWS/LINUX: Discrete GPU + RAM architecture
         } else {
-            if (vramGB >= model.req_vram_gb * 1.3) {
-                modelFit = 'best';
-            } else if (vramGB >= model.req_vram_gb) {
-                modelFit = 'good';
-            } else if (totalRamGB >= model.req_ram_gb + 4) {
-                modelFit = 'bad';
+            const hasNvidia = graphics.controllers.some(g => g.model.toLowerCase().includes('nvidia'));
+
+            if (!hasNvidia) {
+                // CPU-only inference: very slow, only recommend tiny models
+                if (model.req_vram_gb > 8) return; // Skip large models entirely
+
+                // Check if model fits in system RAM
+                if (totalRamGB >= model.req_ram_gb * 2) {
+                    modelFit = 'bad'; // CPU inference is always "bad" but possible
+                } else {
+                    return; // Not enough RAM
+                }
             } else {
-                modelFit = 'bad';
+                // DEDICATED GPU: Check VRAM first, then RAM
+
+                // VRAM requirements (models load here for GPU inference)
+                if (vramGB >= model.req_vram_gb * 1.4) {
+                    // 40% VRAM headroom = best performance
+
+                    // DESKTOP bonus: sustained performance, no thermal throttling
+                    if (formFactor === 'desktop') {
+                        modelFit = 'best'; // Desktop can sustain max performance
+                    } else {
+                        // Laptop: thermal throttling may occur under sustained load
+                        modelFit = vramGB >= model.req_vram_gb * 1.6 ? 'best' : 'good';
+                    }
+
+                } else if (vramGB >= model.req_vram_gb * 1.15) {
+                    // 15% VRAM headroom = good performance
+                    modelFit = formFactor === 'desktop' ? 'good' : 'good';
+
+                } else if (vramGB >= model.req_vram_gb) {
+                    // Meets VRAM minimum = bad (will work but may be slow/unstable)
+                    modelFit = 'bad';
+
+                } else if (totalRamGB >= model.req_ram_gb + 8) {
+                    // Doesn't fit in VRAM but has lots of RAM for offloading
+                    // This is SLOW but possible
+                    modelFit = 'bad';
+                } else {
+                    // Can't run this model
+                    return;
+                }
             }
         }
 
         categorizedModels[modelFit].push({
             ...model,
-            fitReason: getFitReason(modelFit, model, vramGB, totalRamGB, isAppleSilicon)
+            fitReason: getFitReason(modelFit, model, vramGB, totalRamGB, isAppleSilicon, formFactor)
         });
     });
 
@@ -132,18 +180,38 @@ export function analyzeHardware(systemData, userIntent, formFactor = 'laptop', u
     };
 }
 
-function getFitReason(fitLevel, model, vramGB, ramGB, isAppleSilicon) {
-    if (fitLevel === 'best') {
-        return isAppleSilicon
-            ? `Plenty of RAM headroom (${Math.round(ramGB * 0.75)}GB available)`
-            : `VRAM: ${Math.round(vramGB)}GB >> ${model.req_vram_gb}GB needed`;
-    } else if (fitLevel === 'good') {
-        return isAppleSilicon
-            ? `Fits in unified memory`
-            : `Fits in VRAM (${model.req_vram_gb}GB needed)`;
+function getFitReason(fitLevel, model, vramGB, ramGB, isAppleSilicon, formFactor) {
+    if (isAppleSilicon) {
+        // Apple Silicon unified memory explanations
+        if (fitLevel === 'best') {
+            return `✅ Excellent fit in unified memory (${Math.round(ramGB * 0.8)}GB available, needs ${model.req_ram_gb}GB)`;
+        } else if (fitLevel === 'good') {
+            return `✓ Fits in unified memory with moderate headroom`;
+        } else {
+            return `⚠️ Minimal headroom - may be slow under load`;
+        }
     } else {
-        return isAppleSilicon
-            ? `Requires ${model.req_ram_gb}GB, may struggle`
-            : `Will offload to RAM (slow inference)`;
+        // Windows/Linux discrete GPU explanations
+        const hasNvidia = vramGB > 0;
+
+        if (!hasNvidia) {
+            return `⚠️ CPU-only inference (no NVIDIA GPU) - will be very slow`;
+        }
+
+        if (fitLevel === 'best') {
+            if (formFactor === 'desktop') {
+                return `✅ ${Math.round(vramGB)}GB VRAM » ${model.req_vram_gb}GB needed. Desktop = sustained performance`;
+            } else {
+                return `✅ ${Math.round(vramGB)}GB VRAM » ${model.req_vram_gb}GB needed. Watch thermals on laptop`;
+            }
+        } else if (fitLevel === 'good') {
+            return `✓ Fits in ${Math.round(vramGB)}GB VRAM (needs ${model.req_vram_gb}GB)`;
+        } else {
+            if (vramGB >= model.req_vram_gb) {
+                return `⚠️ Minimal VRAM headroom - may stutter or be unstable`;
+            } else {
+                return `⚠️ Will offload to RAM (VRAM: ${Math.round(vramGB)}GB < ${model.req_vram_gb}GB needed) - slow inference`;
+            }
+        }
     }
 }
