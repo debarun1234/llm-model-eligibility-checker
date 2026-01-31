@@ -370,5 +370,601 @@
             "fast"
         ],
         "min_score": 45
+    },
+    {
+        "id": "llama-4-scout-17b-instruct-q4",
+        "name": "Meta Llama 4 Scout 17B Instruct (4-bit)",
+        "family": "Llama 4",
+        "size_params": "17B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 12,
+        "req_ram_gb": 18,
+        "description": "Next-gen Llama with strong reasoning and tool-use focus. Designed as a scalable default.",
+        "tags": [
+            "general",
+            "reasoning",
+            "agent"
+        ],
+        "min_score": 60
+    },
+    {
+        "id": "llama-4-maverick-400b-q2",
+        "name": "Meta Llama 4 Maverick 400B (2-bit)",
+        "family": "Llama 4",
+        "size_params": "400B",
+        "quantization": "Q2_K",
+        "req_vram_gb": 96,
+        "req_ram_gb": 384,
+        "description": "Flagship Llama 4 MoE-class model. Research and enterprise only.",
+        "tags": [
+            "enterprise",
+            "reasoning",
+            "research"
+        ],
+        "min_score": 100
+    },
+    {
+        "id": "gpt-oss-20b-instruct-q4",
+        "name": "GPT-OSS 20B Instruct (4-bit)",
+        "family": "GPT-OSS",
+        "size_params": "20B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 14,
+        "req_ram_gb": 20,
+        "description": "OpenAI open-weight release. Strong alignment, clean instruction following.",
+        "tags": [
+            "general",
+            "reasoning",
+            "chat"
+        ],
+        "min_score": 65
+    },
+    {
+        "id": "gpt-oss-120b-instruct-q3",
+        "name": "GPT-OSS 120B Instruct (3-bit)",
+        "family": "GPT-OSS",
+        "size_params": "120B",
+        "quantization": "Q3_K_M",
+        "req_vram_gb": 60,
+        "req_ram_gb": 128,
+        "description": "Large open GPT-class model. Strong reasoning and long-context behavior.",
+        "tags": [
+            "expert",
+            "reasoning",
+            "enterprise"
+        ],
+        "min_score": 92
+    },
+    {
+        "id": "llava-1-6-34b-q4",
+        "name": "LLaVA 1.6 34B Vision Instruct (4-bit)",
+        "family": "LLaVA",
+        "size_params": "34B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 22,
+        "req_ram_gb": 28,
+        "description": "High-quality vision-language model. Strong reasoning over images and text.",
+        "tags": [
+            "vision",
+            "reasoning",
+            "multimodal"
+        ],
+        "min_score": 80
+    },
+    {
+        "id": "llava-1-6-13b-q4",
+        "name": "LLaVA 1.6 13B Vision Instruct (4-bit)",
+        "family": "LLaVA",
+        "size_params": "13B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 10,
+        "req_ram_gb": 16,
+        "description": "Balanced vision model. Good OCR, charts, and document understanding.",
+        "tags": [
+            "vision",
+            "general",
+            "multimodal"
+        ],
+        "min_score": 55
+    },
+    {
+        "id": "llava-phi-3-mini-q4",
+        "name": "LLaVA Phi-3 Mini Vision (4-bit)",
+        "family": "LLaVA-Phi",
+        "size_params": "4.2B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 5,
+        "req_ram_gb": 8,
+        "description": "Lightweight vision model. Excellent for screenshots and UI analysis.",
+        "tags": [
+            "vision",
+            "fast",
+            "low-resource"
+        ],
+        "min_score": 25
+    },
+    {
+        "id": "bakllava-1-7b-q5",
+        "name": "BakLLaVA 1.0 7B Vision (5-bit)",
+        "family": "BakLLaVA",
+        "size_params": "7B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 12,
+        "description": "Compact vision-language model. Solid for basic image Q&A.",
+        "tags": [
+            "vision",
+            "fast"
+        ],
+        "min_score": 30
+    },
+    {
+        "id": "moondream-2-1.8b-q5",
+        "name": "Moondream 2 1.8B Vision (5-bit)",
+        "family": "Moondream",
+        "size_params": "1.8B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 3,
+        "req_ram_gb": 4,
+        "description": "Tiny vision model. Very fast image captioning and OCR-style tasks.",
+        "tags": [
+            "vision",
+            "edge",
+            "mobile"
+        ],
+        "min_score": 10
+    },
+    {
+        "id": "qwen-vl-7b-instruct-q4",
+        "name": "Qwen VL 7B Instruct (4-bit)",
+        "family": "Qwen-VL",
+        "size_params": "7B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 12,
+        "description": "Strong multilingual vision-language model. Excellent OCR and diagrams.",
+        "tags": [
+            "vision",
+            "multilingual",
+            "document"
+        ],
+        "min_score": 45
+    },
+    {
+        "id": "qwen-vl-14b-instruct-q4",
+        "name": "Qwen VL 14B Instruct (4-bit)",
+        "family": "Qwen-VL",
+        "size_params": "14B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 12,
+        "req_ram_gb": 18,
+        "description": "More capable vision reasoning. Strong charts, tables, and layouts.",
+        "tags": [
+            "vision",
+            "reasoning",
+            "document"
+        ],
+        "min_score": 65
+    },
+    {
+        "id": "phi-3-vision-4b-q4",
+        "name": "Microsoft Phi-3 Vision 4B (4-bit)",
+        "family": "Phi Vision",
+        "size_params": "4B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 5,
+        "req_ram_gb": 8,
+        "description": "Efficient vision model. Strong spatial and diagram understanding.",
+        "tags": [
+            "vision",
+            "fast",
+            "edge"
+        ],
+        "min_score": 28
+    },
+    {
+        "id": "llama-3-2-7b-instruct-q5",
+        "name": "Meta Llama 3.2 7B Instruct (5-bit)",
+        "family": "Llama 3.2",
+        "size_params": "7B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 12,
+        "description": "Optimized 7B LLaMA with robust instruction following.",
+        "tags": [
+            "chat",
+            "fast",
+            "general"
+        ],
+        "min_score": 30
+    },
+    {
+        "id": "llama-3-2-13b-instruct-q4",
+        "name": "Meta Llama 3.2 13B Instruct (4-bit)",
+        "family": "Llama 3.2",
+        "size_params": "13B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 10,
+        "req_ram_gb": 16,
+        "description": "Balanced 13B variant with improved reasoning and context.",
+        "tags": [
+            "general",
+            "reasoning"
+        ],
+        "min_score": 50
+    },
+    {
+        "id": "llama-3-2-34b-instruct-q4",
+        "name": "Meta Llama 3.2 34B Instruct (4-bit)",
+        "family": "Llama 3.2",
+        "size_params": "34B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 22,
+        "req_ram_gb": 28,
+        "description": "Stronger large-model LLaMA with expanded context reasoning.",
+        "tags": [
+            "reasoning",
+            "expert"
+        ],
+        "min_score": 75
+    },
+    {
+        "id": "llama-3-3-7b-instruct-q5",
+        "name": "Meta Llama 3.3 7B Instruct (5-bit)",
+        "family": "Llama 3.3",
+        "size_params": "7B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 12,
+        "description": "Improved 7B with better instruction alignment.",
+        "tags": [
+            "chat",
+            "alignment"
+        ],
+        "min_score": 35
+    },
+    {
+        "id": "llama-3-3-13b-instruct-q4",
+        "name": "Meta Llama 3.3 13B Instruct (4-bit)",
+        "family": "Llama 3.3",
+        "size_params": "13B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 10,
+        "req_ram_gb": 16,
+        "description": "Mid-range model with enhanced reasoning and longer context.",
+        "tags": [
+            "reasoning",
+            "general"
+        ],
+        "min_score": 55
+    },
+    {
+        "id": "llama-3-3-34b-instruct-q4",
+        "name": "Meta Llama 3.3 34B Instruct (4-bit)",
+        "family": "Llama 3.3",
+        "size_params": "34B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 22,
+        "req_ram_gb": 28,
+        "description": "Large LLaMA 3.3 with stronger logic and extended context.",
+        "tags": [
+            "reasoning",
+            "expert"
+        ],
+        "min_score": 85
+    },
+    {
+        "id": "deepseek-r1-chimera-120b-q4",
+        "name": "DeepSeek R1 Chimera 120B (4-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "120B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 64,
+        "req_ram_gb": 128,
+        "description": "DeepSeek's MoE-style research model. Strong reasoning and long-context capabilities.",
+        "tags": [
+            "research",
+            "reasoning",
+            "enterprise"
+        ],
+        "min_score": 90
+    },
+    {
+        "id": "deepseek-r1-chimera-236b-q3",
+        "name": "DeepSeek R1 Chimera 236B (3-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "236B",
+        "quantization": "Q3_K_M",
+        "req_vram_gb": 80,
+        "req_ram_gb": 160,
+        "description": "Massive MoE-class model. High-end research and enterprise use.",
+        "tags": [
+            "research",
+            "enterprise",
+            "expert"
+        ],
+        "min_score": 98
+    },
+    {
+        "id": "deepseek-r1-chimera-47b-q4",
+        "name": "DeepSeek R1 Chimera 47B (4-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "47B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 28,
+        "req_ram_gb": 36,
+        "description": "Mid-size MoE model. Good balance of performance and resource usage.",
+        "tags": [
+            "reasoning",
+            "general"
+        ],
+        "min_score": 70
+    },
+    {
+        "id": "deepseek-r1-chimera-7b-q5",
+        "name": "DeepSeek R1 Chimera 7B (5-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "7B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 8,
+        "req_ram_gb": 12,
+        "description": "Lightweight MoE model. Fast and capable for its size.",
+        "tags": [
+            "fast",
+            "general"
+        ],
+        "min_score": 35
+    },
+    {
+        "id": "deepseek-r1-chimera-14b-q5",
+        "name": "DeepSeek R1 Chimera 14B (5-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "14B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 12,
+        "req_ram_gb": 18,
+        "description": "Balanced MoE model with strong reasoning.",
+        "tags": [
+            "reasoning",
+            "general"
+        ],
+        "min_score": 55
+    },
+    {
+        "id": "deepseek-r1-chimera-28b-q4",
+        "name": "DeepSeek R1 Chimera 28B (4-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "28B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 18,
+        "req_ram_gb": 24,
+        "description": "Strong mid-range MoE model with good reasoning capabilities.",
+        "tags": [
+            "reasoning",
+            "general"
+        ],
+        "min_score": 65
+    },
+    {
+        "id": "deepseek-r1-chimera-56b-q4",
+        "name": "DeepSeek R1 Chimera 56B (4-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "56B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 32,
+        "req_ram_gb": 40,
+        "description": "High-performance MoE model with strong reasoning and context.",
+        "tags": [
+            "reasoning",
+            "expert"
+        ],
+        "min_score": 80
+    },
+    {
+        "id": "deepseek-r1-chimera-84b-q3",
+        "name": "DeepSeek R1 Chimera 84B (3-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "84B",
+        "quantization": "Q3_K_M",
+        "req_vram_gb": 48,
+        "req_ram_gb": 64,
+        "description": "Large MoE model with strong reasoning and long-context capabilities.",
+        "tags": [
+            "reasoning",
+            "expert"
+        ],
+        "min_score": 88
+    },
+    {
+        "id": "deepseek-r1-chimera-168b-q2",
+        "name": "DeepSeek R1 Chimera 168B (2-bit)",
+        "family": "DeepSeek R1",
+        "size_params": "168B",
+        "quantization": "Q2_K",
+        "req_vram_gb": 60,
+        "req_ram_gb": 128,
+        "description": "Massive MoE-class model. Research and enterprise only.",
+        "tags": [
+            "research",
+            "enterprise",
+            "expert"
+        ],
+        "min_score": 96
+    },
+    {
+        "id": "qwen3-vl-8b-q4",
+        "name": "Qwen 3 VL 8B (4-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "8B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 10,
+        "req_ram_gb": 16,
+        "description": "Alibaba's compact multimodal model. Good for vision-language tasks on mid-range hardware.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "general"
+        ],
+        "min_score": 40
+    },
+    {
+        "id": "qwen3-vl-14b-q4",
+        "name": "Qwen 3 VL 14B (4-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "14B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 14,
+        "req_ram_gb": 20,
+        "description": "Mid-size multimodal model with strong vision-language reasoning.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "reasoning"
+        ],
+        "min_score": 60
+    },
+    {
+        "id": "qwen3-vl-32b-q4",
+        "name": "Qwen 3 VL 32B (4-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "32B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 24,
+        "req_ram_gb": 32,
+        "description": "Large multimodal model with advanced vision-language capabilities.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "expert"
+        ],
+        "min_score": 80
+    },
+    {
+        "id": "qwen3-vl-72b-q4",
+        "name": "Qwen 3 VL 72B (4-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "72B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 48,
+        "req_ram_gb": 64,
+        "description": "High-end multimodal model with strong reasoning and vision understanding.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "expert"
+        ],
+        "min_score": 90
+    },
+    {
+        "id": "qwen3-vl-120b-q4",
+        "name": "Qwen 3 VL 120B (4-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "120B",
+        "quantization": "Q4_K_M",
+        "req_vram_gb": 64,
+        "req_ram_gb": 128,
+        "description": "Massive multimodal model. Advanced vision-language reasoning and enterprise-grade performance.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "enterprise"
+        ],
+        "min_score": 95
+    },
+    {
+        "id": "qwen3-vl-8b-q5",
+        "name": "Qwen 3 VL 8B (5-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "8B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 10,
+        "req_ram_gb": 16,
+        "description": "Compact multimodal model with improved quality.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "general"
+        ],
+        "min_score": 42
+    },
+    {
+        "id": "qwen3-vl-14b-q5",
+        "name": "Qwen 3 VL 14B (5-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "14B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 14,
+        "req_ram_gb": 20,
+        "description": "Mid-size multimodal model with enhanced reasoning.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "reasoning"
+        ],
+        "min_score": 62
+    },
+    {
+        "id": "qwen3-vl-32b-q5",
+        "name": "Qwen 3 VL 32B (5-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "32B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 24,
+        "req_ram_gb": 32,
+        "description": "Large multimodal model with strong vision-language capabilities.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "expert"
+        ],
+        "min_score": 82
+    },
+    {
+        "id": "qwen3-vl-72b-q5",
+        "name": "Qwen 3 VL 72B (5-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "72B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 48,
+        "req_ram_gb": 64,
+        "description": "High-end multimodal model with strong reasoning and vision understanding.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "expert"
+        ],
+        "min_score": 92
+    },
+    {
+        "id": "qwen3-vl-120b-q5",
+        "name": "Qwen 3 VL 120B (5-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "120B",
+        "quantization": "Q5_K_M",
+        "req_vram_gb": 64,
+        "req_ram_gb": 128,
+        "description": "Massive multimodal model. Advanced vision-language reasoning and enterprise-grade performance.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "enterprise"
+        ],
+        "min_score": 97
+    },
+    {
+        "id": "qwen3-vl-8b-q6",
+        "name": "Qwen 3 VL 8B (6-bit)",
+        "family": "Qwen 3 VL",
+        "size_params": "8B",
+        "quantization": "Q6_K",
+        "req_vram_gb": 10,
+        "req_ram_gb": 16,
+        "description": "Compact multimodal model with improved quality and reasoning.",
+        "tags": [
+            "multimodal",
+            "vision",
+            "general"
+        ],
+        "min_score": 45
     }
 ]

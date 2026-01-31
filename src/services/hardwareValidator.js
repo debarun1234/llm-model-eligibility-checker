@@ -4,9 +4,12 @@ export async function quickHardwareCheck() {
         const result = await window.electronAPI.scanSystem();
         console.log('Quick check full result:', result);
 
-        // scanSystem returns { cpu, mem, graphics, diskLayout, os }
-        // Access CPU from the structured result
-        const cpuData = result.cpu || result;
+        if (result.status !== 'success' || !result.data) {
+            return null;
+        }
+
+        // scanSystem returns { status: 'success', data: { cpu, mem, graphics, diskLayout, osInfo } }
+        const cpuData = result.data.cpu;
         const cpuManufacturer = cpuData.manufacturer || 'Unknown';
 
         const isAppleSilicon = cpuManufacturer.includes('Apple');

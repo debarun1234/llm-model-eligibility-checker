@@ -70,11 +70,22 @@ export function analyzeHardware(systemData, userIntent, formFactor = 'laptop', u
     }
 
     modelDB.forEach(model => {
-        const intentMatch = userIntent === 'chat' ? true : model.tags.includes(userIntent) || model.tags.includes('general');
+        // Intent matching with support for vision/multimodal
+        let intentMatch = false;
+
+        if (userIntent === 'chat') {
+            intentMatch = true; // All models work for chat
+        } else if (userIntent === 'vision') {
+            // Vision intent requires vision or multimodal tags
+            intentMatch = model.tags.includes('vision') || model.tags.includes('multimodal');
+        } else {
+            // Other intents (dev, creative, data)
+            intentMatch = model.tags.includes(userIntent) || model.tags.includes('general');
+        }
+
         if (!intentMatch) return;
 
         let modelFit = 'bad';
-
         if (isAppleSilicon) {
             const availableForModel = totalRamGB * 0.75;
 

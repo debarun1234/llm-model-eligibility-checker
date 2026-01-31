@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { quickHardwareCheck } from '../services/hardwareValidator';
 
 const InputScreen = ({ onSubmit }) => {
+    const manufacturerRef = useRef(null);
+
     const [formData, setFormData] = useState({
         deviceType: 'laptop',
         manufacturer: '',
@@ -14,6 +16,7 @@ const InputScreen = ({ onSubmit }) => {
     const [errors, setErrors] = useState({});
     const [hardwareInfo, setHardwareInfo] = useState(null);
     const [validationWarning, setValidationWarning] = useState('');
+    const [validationError, setValidationError] = useState(''); // Inline error instead of alert
 
     // Quick hardware check on mount
     useEffect(() => {
@@ -55,9 +58,9 @@ const InputScreen = ({ onSubmit }) => {
         // Only show hardware detection warning if we have valid hardware info
         if (hwInfo.cpuBrand !== 'Unknown') {
             if (userSaidApple && !hwInfo.isAppleSilicon) {
-                setValidationWarning(`⚠️ You selected "Apple Silicon" but we detected a ${hwInfo.cpuBrand} system. Note: Some older Macs use Intel chips.`);
+                setValidationWarning(`⚠️ You selected "Apple Silicon" but we detected a ${hwInfo.cpuBrand} system.Note: Some older Macs use Intel chips.`);
             } else if (!userSaidApple && hwInfo.isAppleSilicon) {
-                setValidationWarning(`⚠️ You selected "Intel/AMD" but we detected Apple Silicon (${hwInfo.cpuBrand}). Please verify your selection.`);
+                setValidationWarning(`⚠️ You selected "Intel/AMD" but we detected Apple Silicon(${hwInfo.cpuBrand}).Please verify your selection.`);
             } else {
                 setValidationWarning('');
             }
@@ -109,14 +112,13 @@ const InputScreen = ({ onSubmit }) => {
 
         // Block obvious mismatches
         if (isAppleProcessor && isNonAppleBrand) {
-            alert(`❌ MISMATCH DETECTED\n\n"${formData.manufacturer}" is not an Apple manufacturer.\n\nYou cannot select "Apple Silicon" with a ${formData.manufacturer} device.\n\nPlease select "Intel/AMD (x86)" instead.`);
+            setValidationError(`❌ MISMATCH: "${formData.manufacturer}" is not an Apple manufacturer. You cannot select "Apple Silicon" with a ${formData.manufacturer} device. Please select "Intel/AMD (x86)" instead.`);
+            manufacturerRef.current?.focus();
+            manufacturerRef.current?.select();
             return;
         }
 
-        if (!isAppleProcessor && isAppleBrand && !manufacturer.includes('intel')) {
-            alert(`❌ MISMATCH DETECTED\n\n"${formData.manufacturer}" suggests an Apple device.\n\nIf this is an M1/M2/M3 Mac, select "Apple Silicon".\nIf this is an older Intel Mac, select "Intel/AMD (x86)".`);
-            return;
-        }
+
 
         // ANTI-IMPERSONATION CHECK: Verify claimed hardware matches detected hardware
         if (hardwareInfo && hardwareInfo.cpuBrand !== 'Unknown') {
@@ -125,13 +127,17 @@ const InputScreen = ({ onSubmit }) => {
 
             // Block if user claims Apple but system is NOT Apple
             if (userClaimsApple && !systemIsApple) {
-                alert(`🚫 IMPERSONATION DETECTED\n\nYou entered "${formData.manufacturer}" and selected "${isAppleProcessor ? 'Apple Silicon' : 'Intel/AMD'}", but our scan detected:\n\nActual CPU: ${hardwareInfo.cpuBrand}\n\nPlease enter your ACTUAL hardware information.\n\nThis check prevents false recommendations.`);
+                setValidationError(`🚫 IMPERSONATION DETECTED: You entered "${formData.manufacturer}" and selected "${isAppleProcessor ? 'Apple Silicon' : 'Intel/AMD'}", but our scan detected: ${hardwareInfo.cpuBrand}. Please enter your ACTUAL hardware information.`);
+                manufacturerRef.current?.focus();
+                manufacturerRef.current?.select();
                 return;
             }
 
             // Block if user claims non-Apple but system IS Apple
             if (!userClaimsApple && systemIsApple) {
-                alert(`🚫 MISMATCH DETECTED\n\nYou entered "${formData.manufacturer}" with "Intel/AMD", but our scan detected:\n\nActual CPU: ${hardwareInfo.cpuBrand} (Apple Silicon)\n\nPlease select "Apple Silicon" instead.`);
+                setValidationError(`🚫 MISMATCH: You entered "${formData.manufacturer}" with "Intel/AMD", but our scan detected: ${hardwareInfo.cpuBrand} (Apple Silicon). Please select "Apple Silicon" instead.`);
+                manufacturerRef.current?.focus();
+                manufacturerRef.current?.select();
                 return;
             }
         }
@@ -187,6 +193,33 @@ const InputScreen = ({ onSubmit }) => {
                 </motion.div>
             )}
 
+            {/* VALIDATION ERROR BANNER */}
+            {validationError && (
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    style={{
+                        marginBottom: '1.5rem',
+                        padding: '1rem',
+                        background: 'rgba(255, 50, 50, 0.15)',
+                        border: '2px solid var(--accent-error)',
+                        borderRadius: '8px',
+                        color: 'var(--accent-error)',
+                        fontSize: '0.95rem',
+                        display: 'flex',
+                        gap: '0.75rem',
+                        alignItems: 'flex-start',
+                        boxShadow: '0 0 20px rgba(255, 50, 50, 0.3)'
+                    }}
+                >
+                    <span style={{ fontSize: '1.5rem' }}>🚫</span>
+                    <div style={{ flex: 1 }}>
+                        <strong style={{ display: 'block', marginBottom: '0.5rem' }}>Cannot Proceed:</strong>
+                        {validationError}
+                    </div>
+                </motion.div>
+            )}
+
             <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
 
                 {/* Full Width Intent */}
@@ -197,6 +230,7 @@ const InputScreen = ({ onSubmit }) => {
                         <option value="dev">Coding / Development</option>
                         <option value="creative">Creative Writing / Roleplay</option>
                         <option value="data">Data Analysis / Local RAG</option>
+                        <option value="vision">Image Processing / Vision Tasks</option>
                     </select>
                 </div>
 
@@ -235,6 +269,7 @@ const InputScreen = ({ onSubmit }) => {
                         {errors.manufacturer && <span style={{ color: 'var(--accent-error)', marginLeft: '0.5rem' }}>*Required</span>}
                     </label>
                     <input
+                        ref={manufacturerRef}
                         type="text"
                         name="manufacturer"
                         value={formData.manufacturer}
