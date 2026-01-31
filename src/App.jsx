@@ -27,7 +27,12 @@ function App() {
 
   const handleScanComplete = (systemData) => {
     // Analyze with user data context
-    const analysis = analyzeHardware(systemData, userData?.intent, userData?.deviceType);
+    const analysis = analyzeHardware(
+      systemData,
+      userData?.intent,
+      userData?.deviceType,
+      userData?.processorType // Pass processor type for validation
+    );
     setResults(analysis);
     setStage('results');
   };

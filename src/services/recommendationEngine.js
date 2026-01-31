@@ -1,6 +1,6 @@
 import modelDB from '../data/models.json';
 
-export function analyzeHardware(systemData, userIntent, formFactor = 'laptop') {
+export function analyzeHardware(systemData, userIntent, formFactor = 'laptop', userProcessorType) {
     const { mem, graphics, cpu, diskLayout } = systemData;
 
     // Hardware Specs
@@ -11,7 +11,6 @@ export function analyzeHardware(systemData, userIntent, formFactor = 'laptop') {
 
     let score = 0;
     let rank = 'Bad';
-    let localRecommendations = [];
     let warnings = [];
 
     // --- SCORING ---
@@ -52,23 +51,61 @@ export function analyzeHardware(systemData, userIntent, formFactor = 'laptop') {
     else if (score >= 40) rank = 'Good';
     else rank = 'Bad';
 
-    // --- DATABASE QUERY ---
-    localRecommendations = modelDB.filter(model => {
-        let fits = false;
+    // --- MODEL CATEGORIZATION ---
+    const categorizedModels = {
+        best: [],
+        good: [],
+        bad: []
+    };
+
+    // --- VALIDATION: Check user input vs actual hardware ---
+    const validationWarnings = [];
+
+    // Check processor type mismatch
+    const userSaidApple = userProcessorType === 'apple';
+    if (userSaidApple && !isAppleSilicon) {
+        validationWarnings.push("⚠️ INPUT MISMATCH: You selected 'Apple Silicon' but we detected a Windows/Intel system. Using ACTUAL detected hardware for recommendations.");
+    } else if (!userSaidApple && isAppleSilicon) {
+        validationWarnings.push("⚠️ INPUT MISMATCH: You selected 'Intel/AMD' but we detected Apple Silicon. Using ACTUAL detected hardware for recommendations.");
+    }
+
+    modelDB.forEach(model => {
+        const intentMatch = userIntent === 'chat' ? true : model.tags.includes(userIntent) || model.tags.includes('general');
+        if (!intentMatch) return;
+
+        let modelFit = 'bad';
+
         if (isAppleSilicon) {
-            fits = totalRamGB >= model.req_ram_gb;
+            const availableForModel = totalRamGB * 0.75;
+
+            if (availableForModel >= model.req_ram_gb * 1.5) {
+                modelFit = 'best';
+            } else if (availableForModel >= model.req_ram_gb) {
+                modelFit = 'good';
+            } else {
+                modelFit = 'bad';
+            }
         } else {
-            fits = vramGB >= model.req_vram_gb;
+            if (vramGB >= model.req_vram_gb * 1.3) {
+                modelFit = 'best';
+            } else if (vramGB >= model.req_vram_gb) {
+                modelFit = 'good';
+            } else if (totalRamGB >= model.req_ram_gb + 4) {
+                modelFit = 'bad';
+            } else {
+                modelFit = 'bad';
+            }
         }
 
-        const intentMatch = userIntent === 'chat' ? true : model.tags.includes(userIntent) || model.tags.includes('general');
+        categorizedModels[modelFit].push({
+            ...model,
+            fitReason: getFitReason(modelFit, model, vramGB, totalRamGB, isAppleSilicon)
+        });
+    });
 
-        return fits && intentMatch && model.min_score <= (score + 10); // +10 buffer
-    }).sort((a, b) => b.size_params.localeCompare(a.size_params)).slice(0, 5);
-
-    if (localRecommendations.length === 0) {
-        localRecommendations.push(modelDB.find(m => m.id === 'phi-3-mini-128k-q4'));
-    }
+    categorizedModels.best.sort((a, b) => parseInt(b.size_params) - parseInt(a.size_params));
+    categorizedModels.good.sort((a, b) => parseInt(b.size_params) - parseInt(a.size_params));
+    categorizedModels.bad.sort((a, b) => parseInt(b.size_params) - parseInt(a.size_params));
 
     return {
         rank,
@@ -79,7 +116,23 @@ export function analyzeHardware(systemData, userIntent, formFactor = 'laptop') {
             gpu: graphics.controllers.map(g => g.model).join(', '),
             vram: isAppleSilicon ? "Unified" : `${Math.round(vramGB)} GB`
         },
-        recommendations: localRecommendations,
-        warnings
+        categorizedModels,
+        warnings: [...warnings, ...validationWarnings]
     };
+}
+
+function getFitReason(fitLevel, model, vramGB, ramGB, isAppleSilicon) {
+    if (fitLevel === 'best') {
+        return isAppleSilicon
+            ? `Plenty of RAM headroom (${Math.round(ramGB * 0.75)}GB available)`
+            : `VRAM: ${Math.round(vramGB)}GB >> ${model.req_vram_gb}GB needed`;
+    } else if (fitLevel === 'good') {
+        return isAppleSilicon
+            ? `Fits in unified memory`
+            : `Fits in VRAM (${model.req_vram_gb}GB needed)`;
+    } else {
+        return isAppleSilicon
+            ? `Requires ${model.req_ram_gb}GB, may struggle`
+            : `Will offload to RAM (slow inference)`;
+    }
 }
