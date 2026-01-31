@@ -156,15 +156,76 @@ export function analyzeHardware(systemData, userIntent, formFactor = 'laptop', u
             }
         }
 
+        // Add priority score for intelligent ranking
+        const priorityScore = (model) => {
+            let score = 0;
+
+            // 1. USE CASE MATCH STRENGTH (0-50 points)
+            if (userIntent === 'vision' && model.tags.includes('vision')) {
+                score += 50; // Perfect match for vision tasks
+            } else if (userIntent === 'vision' && model.tags.includes('multimodal')) {
+                score += 40; // Good match
+            } else if (userIntent !== 'chat' && model.tags.includes(userIntent)) {
+                score += 45; // Specific intent match
+            } else if (model.tags.includes('general')) {
+                score += 25; // General purpose
+            }
+
+            // 2. MODEL POPULARITY/QUALITY (0-30 points)
+            // Prioritize well-known, proven models
+            const popularModels = ['llama', 'mistral', 'qwen', 'phi', 'gemma', 'deepseek'];
+            const modelNameLower = model.name.toLowerCase();
+            if (popularModels.some(popular => modelNameLower.includes(popular))) {
+                score += 30;
+            }
+
+            // 3. QUANTIZATION PREFERENCE (0-20 points)
+            // Prefer higher quality quantizations for best category
+            if (model.quantization.includes('Q4_K_M')) score += 20; // Sweet spot
+            else if (model.quantization.includes('Q5')) score += 18; // High quality
+            else if (model.quantization.includes('Q4')) score += 15; // Good balance
+            else if (model.quantization.includes('Q3')) score += 10; // Acceptable
+
+            return score;
+        };
+
+        // Sort by priority score (intelligent ranking)
         categorizedModels[modelFit].push({
             ...model,
-            fitReason: getFitReason(modelFit, model, vramGB, totalRamGB, isAppleSilicon, formFactor)
+            fitReason: getFitReason(modelFit, model, vramGB, totalRamGB, isAppleSilicon, formFactor),
+            _priorityScore: priorityScore(model)
         });
     });
 
-    categorizedModels.best.sort((a, b) => parseInt(b.size_params) - parseInt(a.size_params));
-    categorizedModels.good.sort((a, b) => parseInt(b.size_params) - parseInt(a.size_params));
-    categorizedModels.bad.sort((a, b) => parseInt(b.size_params) - parseInt(a.size_params));
+    // INTELLIGENT FILTERING AND RANKING
+    const intelligentFilter = (models, limit = 6) => {
+        // Sort by priority score first
+        models.sort((a, b) => (b._priorityScore || 0) - (a._priorityScore || 0));
+
+        // Diversify: avoid showing multiple quantizations of same base model
+        const seen = new Set();
+        const diverse = [];
+
+        for (const model of models) {
+            // Extract base model name (before quantization)
+            const baseName = model.name.split(/[(\[]|(?=\d+B)/)[0].trim();
+
+            if (!seen.has(baseName) || diverse.length < limit) {
+                diverse.push(model);
+                seen.add(baseName);
+
+                if (diverse.length >= limit) break;
+            }
+        }
+
+        // Remove internal priority score before returning
+        return diverse.map(({ _priorityScore, ...model }) => model);
+    };
+
+    // Apply intelligent filtering to each category
+    categorizedModels.best = intelligentFilter(categorizedModels.best, 6);
+    categorizedModels.good = intelligentFilter(categorizedModels.good, 6);
+    categorizedModels.bad = intelligentFilter(categorizedModels.bad, 5); // Show fewer "bad" options
 
     return {
         rank,

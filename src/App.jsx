@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import './index.css';
 
+import BackgroundParticles from './components/BackgroundParticles';
 import WelcomeScreen from './components/WelcomeScreen';
 import PermissionScreen from './components/PermissionScreen';
 import InputScreen from './components/InputScreen';
@@ -51,43 +52,90 @@ function App() {
 
   return (
     <div className="premium-container">
-      {/* Navigation Header */}
+      {/* Interactive Rainbow Particles Background */}
+      <BackgroundParticles />
+
+      {/* Navigation Header - Glassmorphism Style */}
       {stage !== 'about' && stage !== 'tutorial' && (
         <div style={{
           position: 'absolute',
-          top: '1rem',
-          right: '1rem',
+          top: '1.5rem',
+          right: '1.5rem',
           display: 'flex',
-          gap: '1rem',
+          gap: '0.75rem',
           zIndex: 100
         }}>
           <button
             onClick={handleShowTutorial}
+            className="glass-nav-button"
             style={{
-              background: 'transparent',
-              border: '1px solid var(--accent-primary)',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02))',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              border: '1.5px solid rgba(0, 229, 255, 0.3)',
               color: 'var(--accent-primary)',
-              padding: '0.5rem 1rem',
-              borderRadius: '5px',
+              padding: '0.6rem 1.2rem',
+              borderRadius: '10px',
               cursor: 'pointer',
-              fontSize: '0.9rem'
+              fontSize: '0.9rem',
+              fontWeight: '500',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(0, 229, 255, 0.05))';
+              e.target.style.borderColor = 'var(--accent-primary)';
+              e.target.style.boxShadow = '0 0 20px rgba(0, 229, 255, 0.4), 0 4px 20px rgba(0, 0, 0, 0.3)';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02))';
+              e.target.style.borderColor = 'rgba(0, 229, 255, 0.3)';
+              e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)';
+              e.target.style.transform = 'translateY(0)';
             }}
           >
-            📚 Tutorial
+            <span>📚</span>
+            Tutorial
           </button>
           <button
             onClick={handleShowAbout}
+            className="glass-nav-button"
             style={{
-              background: 'transparent',
-              border: '1px solid var(--accent-primary)',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02))',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              border: '1.5px solid rgba(0, 229, 255, 0.3)',
               color: 'var(--accent-primary)',
-              padding: '0.5rem 1rem',
-              borderRadius: '5px',
+              padding: '0.6rem 1.2rem',
+              borderRadius: '10px',
               cursor: 'pointer',
-              fontSize: '0.9rem'
+              fontSize: '0.9rem',
+              fontWeight: '500',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(0, 229, 255, 0.05))';
+              e.target.style.borderColor = 'var(--accent-primary)';
+              e.target.style.boxShadow = '0 0 20px rgba(0, 229, 255, 0.4), 0 4px 20px rgba(0, 0, 0, 0.3)';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02))';
+              e.target.style.borderColor = 'rgba(0, 229, 255, 0.3)';
+              e.target.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)';
+              e.target.style.transform = 'translateY(0)';
             }}
           >
-            ℹ️ About
+            <span>ℹ️</span>
+            About
           </button>
         </div>
       )}

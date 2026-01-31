@@ -157,13 +157,38 @@ const InputScreen = ({ onSubmit }) => {
 
     return (
         <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
             className="glass-card"
-            style={{ padding: '2.5rem', maxWidth: '600px', margin: 'auto' }}
+            style={{
+                padding: '2.5rem',
+                width: '700px',
+                maxWidth: '90vw',
+                minHeight: '580px',
+                margin: 'auto',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                border: '2px solid rgba(0, 229, 255, 0.4)',
+                boxShadow: `
+                    0 8px 32px rgba(0, 0, 0, 0.4),
+                    0 0 60px rgba(0, 229, 255, 0.15),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.15)
+                `,
+                position: 'relative'
+            }}
         >
-            <h2 style={{ marginBottom: '1.5rem', color: 'var(--accent-primary)' }}>System Profile</h2>
+            <h2 style={{
+                marginBottom: '2rem',
+                color: 'var(--accent-primary)',
+                fontSize: '2.2rem',
+                fontWeight: '600',
+                textAlign: 'center',
+                textShadow: '0 0 20px rgba(0, 229, 255, 0.5)',
+                letterSpacing: '0.05em'
+            }}>
+                System Profile
+            </h2>
 
             {/* Validation Warning Banner */}
             {validationWarning && (
@@ -234,32 +259,114 @@ const InputScreen = ({ onSubmit }) => {
                     </select>
                 </div>
 
-                {/* Device Type */}
+                {/* Device Type - Glass Pill Radio Buttons */}
                 <div style={{ gridColumn: '1 / -1' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Form Factor</label>
-                    <div style={{ display: 'flex', gap: '2rem' }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: formData.deviceType === 'laptop' ? 'white' : 'gray' }}>
-                            <input
-                                type="radio"
-                                name="deviceType"
-                                value="laptop"
-                                checked={formData.deviceType === 'laptop'}
-                                onChange={handleChange}
-                                style={{ accentColor: 'var(--accent-primary)' }}
-                            />
-                            Laptop / Macbook
-                        </label>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: formData.deviceType === 'desktop' ? 'white' : 'gray' }}>
-                            <input
-                                type="radio"
-                                name="deviceType"
-                                value="desktop"
-                                checked={formData.deviceType === 'desktop'}
-                                onChange={handleChange}
-                                style={{ accentColor: 'var(--accent-primary)' }}
-                            />
-                            Desktop Workstation
-                        </label>
+                    <label style={{ display: 'block', marginBottom: '0.75rem', color: 'var(--accent-primary)', fontSize: '1.05rem', fontWeight: '500' }}>Form Factor</label>
+                    <div style={{
+                        display: 'flex',
+                        gap: '0',
+                        background: 'rgba(0, 20, 40, 0.5)',
+                        padding: '0.5rem',
+                        borderRadius: '12px',
+                        border: '1.5px solid rgba(0, 229, 255, 0.2)'
+                    }}>
+                        <div
+                            onClick={() => setFormData({ ...formData, deviceType: 'laptop' })}
+                            style={{
+                                flex: 1,
+                                padding: '0.85rem 1.25rem',
+                                cursor: 'pointer',
+                                borderRadius: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                background: formData.deviceType === 'laptop'
+                                    ? 'linear-gradient(135deg, rgba(0, 229, 255, 0.25), rgba(0, 229, 255, 0.15))'
+                                    : 'transparent',
+                                border: formData.deviceType === 'laptop'
+                                    ? '2px solid var(--accent-primary)'
+                                    : '2px solid transparent',
+                                boxShadow: formData.deviceType === 'laptop'
+                                    ? '0 0 25px rgba(0, 229, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                                    : 'none',
+                                backdropFilter: formData.deviceType === 'laptop' ? 'blur(12px)' : 'none'
+                            }}
+                        >
+                            <div style={{
+                                width: '20px',
+                                height: '20px',
+                                borderRadius: '50%',
+                                border: `2px solid ${formData.deviceType === 'laptop' ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.3)'}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                background: formData.deviceType === 'laptop'
+                                    ? 'radial-gradient(circle, var(--accent-primary) 35%, transparent 35%)'
+                                    : 'transparent',
+                                boxShadow: formData.deviceType === 'laptop'
+                                    ? '0 0 10px var(--accent-primary)'
+                                    : 'none',
+                                transition: 'all 0.3s ease'
+                            }} />
+                            <span style={{
+                                color: formData.deviceType === 'laptop' ? '#fff' : 'var(--text-secondary)',
+                                fontWeight: formData.deviceType === 'laptop' ? '600' : '400',
+                                fontSize: '0.95rem',
+                                transition: 'all 0.3s ease'
+                            }}>
+                                Laptop / Macbook
+                            </span>
+                        </div>
+
+                        <div
+                            onClick={() => setFormData({ ...formData, deviceType: 'desktop' })}
+                            style={{
+                                flex: 1,
+                                padding: '0.85rem 1.25rem',
+                                cursor: 'pointer',
+                                borderRadius: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                background: formData.deviceType === 'desktop'
+                                    ? 'linear-gradient(135deg, rgba(0, 229, 255, 0.25), rgba(0, 229, 255, 0.15))'
+                                    : 'transparent',
+                                border: formData.deviceType === 'desktop'
+                                    ? '2px solid var(--accent-primary)'
+                                    : '2px solid transparent',
+                                boxShadow: formData.deviceType === 'desktop'
+                                    ? '0 0 25px rgba(0, 229, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                                    : 'none',
+                                backdropFilter: formData.deviceType === 'desktop' ? 'blur(12px)' : 'none'
+                            }}
+                        >
+                            <div style={{
+                                width: '20px',
+                                height: '20px',
+                                borderRadius: '50%',
+                                border: `2px solid ${formData.deviceType === 'desktop' ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.3)'}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                background: formData.deviceType === 'desktop'
+                                    ? 'radial-gradient(circle, var(--accent-primary) 35%, transparent 35%)'
+                                    : 'transparent',
+                                boxShadow: formData.deviceType === 'desktop'
+                                    ? '0 0 10px var(--accent-primary)'
+                                    : 'none',
+                                transition: 'all 0.3s ease'
+                            }} />
+                            <span style={{
+                                color: formData.deviceType === 'desktop' ? '#fff' : 'var(--text-secondary)',
+                                fontWeight: formData.deviceType === 'desktop' ? '600' : '400',
+                                fontSize: '0.95rem',
+                                transition: 'all 0.3s ease'
+                            }}>
+                                Desktop Workstation
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -297,32 +404,120 @@ const InputScreen = ({ onSubmit }) => {
                     />
                 </div>
 
-                {/* Processor Type */}
+                {/* Processor Type - Glass Pill Radio Buttons */}
                 <div style={{ gridColumn: '1 / -1' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>Processor Architecture</label>
-                    <div style={{ display: 'flex', gap: '2rem' }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: formData.processorType === 'intel' ? 'white' : 'gray' }}>
-                            <input
-                                type="radio"
-                                name="processorType"
-                                value="intel"
-                                checked={formData.processorType === 'intel'}
-                                onChange={handleChange}
-                                style={{ accentColor: 'var(--accent-primary)' }}
-                            />
-                            Intel / AMD (x86)
-                        </label>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', color: formData.processorType === 'apple' ? 'white' : 'gray' }}>
-                            <input
-                                type="radio"
-                                name="processorType"
-                                value="apple"
-                                checked={formData.processorType === 'apple'}
-                                onChange={handleChange}
-                                style={{ accentColor: 'var(--accent-primary)' }}
-                            />
-                            Apple Silicon (M-Series)
-                        </label>
+                    <label style={{ display: 'block', marginBottom: '0.75rem', color: 'var(--accent-primary)', fontSize: '1.05rem', fontWeight: '500' }}>Processor Architecture</label>
+                    <div style={{
+                        display: 'flex',
+                        gap: '0',
+                        background: 'rgba(0, 20, 40, 0.5)',
+                        padding: '0.5rem',
+                        borderRadius: '12px',
+                        border: '1.5px solid rgba(0, 229, 255, 0.2)'
+                    }}>
+                        <div
+                            onClick={() => {
+                                setFormData({ ...formData, processorType: 'intel' });
+                                validateProcessorType('intel', hardwareInfo);
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: '0.85rem 1.25rem',
+                                cursor: 'pointer',
+                                borderRadius: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                background: formData.processorType === 'intel'
+                                    ? 'linear-gradient(135deg, rgba(0, 229, 255, 0.25), rgba(0, 229, 255, 0.15))'
+                                    : 'transparent',
+                                border: formData.processorType === 'intel'
+                                    ? '2px solid var(--accent-primary)'
+                                    : '2px solid transparent',
+                                boxShadow: formData.processorType === 'intel'
+                                    ? '0 0 25px rgba(0, 229, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                                    : 'none',
+                                backdropFilter: formData.processorType === 'intel' ? 'blur(12px)' : 'none'
+                            }}
+                        >
+                            <div style={{
+                                width: '20px',
+                                height: '20px',
+                                borderRadius: '50%',
+                                border: `2px solid ${formData.processorType === 'intel' ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.3)'}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                background: formData.processorType === 'intel'
+                                    ? 'radial-gradient(circle, var(--accent-primary) 35%, transparent 35%)'
+                                    : 'transparent',
+                                boxShadow: formData.processorType === 'intel'
+                                    ? '0 0 10px var(--accent-primary)'
+                                    : 'none',
+                                transition: 'all 0.3s ease'
+                            }} />
+                            <span style={{
+                                color: formData.processorType === 'intel' ? '#fff' : 'var(--text-secondary)',
+                                fontWeight: formData.processorType === 'intel' ? '600' : '400',
+                                fontSize: '0.95rem',
+                                transition: 'all 0.3s ease'
+                            }}>
+                                Intel / AMD (x86)
+                            </span>
+                        </div>
+
+                        <div
+                            onClick={() => {
+                                setFormData({ ...formData, processorType: 'apple' });
+                                validateProcessorType('apple', hardwareInfo);
+                            }}
+                            style={{
+                                flex: 1,
+                                padding: '0.85rem 1.25rem',
+                                cursor: 'pointer',
+                                borderRadius: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                background: formData.processorType === 'apple'
+                                    ? 'linear-gradient(135deg, rgba(0, 229, 255, 0.25), rgba(0, 229, 255, 0.15))'
+                                    : 'transparent',
+                                border: formData.processorType === 'apple'
+                                    ? '2px solid var(--accent-primary)'
+                                    : '2px solid transparent',
+                                boxShadow: formData.processorType === 'apple'
+                                    ? '0 0 25px rgba(0, 229, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                                    : 'none',
+                                backdropFilter: formData.processorType === 'apple' ? 'blur(12px)' : 'none'
+                            }}
+                        >
+                            <div style={{
+                                width: '20px',
+                                height: '20px',
+                                borderRadius: '50%',
+                                border: `2px solid ${formData.processorType === 'apple' ? 'var(--accent-primary)' : 'rgba(255, 255, 255, 0.3)'}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                background: formData.processorType === 'apple'
+                                    ? 'radial-gradient(circle, var(--accent-primary) 35%, transparent 35%)'
+                                    : 'transparent',
+                                boxShadow: formData.processorType === 'apple'
+                                    ? '0 0 10px var(--accent-primary)'
+                                    : 'none',
+                                transition: 'all 0.3s ease'
+                            }} />
+                            <span style={{
+                                color: formData.processorType === 'apple' ? '#fff' : 'var(--text-secondary)',
+                                fontWeight: formData.processorType === 'apple' ? '600' : '400',
+                                fontSize: '0.95rem',
+                                transition: 'all 0.3s ease'
+                            }}>
+                                Apple Silicon (M-Series)
+                            </span>
+                        </div>
                     </div>
                 </div>
 
