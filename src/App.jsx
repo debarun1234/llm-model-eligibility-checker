@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import './index.css';
 
-import BackgroundParticles from './components/BackgroundParticles';
 import WelcomeScreen from './components/WelcomeScreen';
 import PermissionScreen from './components/PermissionScreen';
 import InputScreen from './components/InputScreen';
@@ -52,9 +51,6 @@ function App() {
 
   return (
     <div className="premium-container">
-      {/* Interactive Rainbow Particles Background */}
-      <BackgroundParticles />
-
       {/* Navigation Header - Glassmorphism Style */}
       {stage !== 'about' && stage !== 'tutorial' && (
         <div style={{

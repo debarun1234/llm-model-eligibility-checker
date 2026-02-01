@@ -1,7 +1,10 @@
 {
-  "name": "llm-model-eligibility-checker",
+  "name": "insight-ai",
+  "productName": "Insight AI",
+  "version": "1.0.0",
+  "description": "AI-powered hardware analyzer for Local LLM compatibility",
+  "author": "Debarun Ghosh",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "main": "electron/main.js",
   "scripts": {
@@ -9,8 +12,51 @@
     "start:vite": "vite",
     "electron:dev": "wait-on tcp:5173 && cross-env ELECTRON_START_URL=http://localhost:5173 electron .",
     "build": "vite build",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:all": "npm run build && electron-builder -mw",
+    "pack": "electron-builder --dir",
     "lint": "eslint .",
     "preview": "vite preview"
+  },
+  "build": {
+    "appId": "com.debarunghosh.insightai",
+    "productName": "Insight AI",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico"
+    },
+    "dmg": {
+      "title": "Insight AI",
+      "icon": "build/icon.icns"
+    }
   },
   "dependencies": {
     "framer-motion": "^12.29.2",

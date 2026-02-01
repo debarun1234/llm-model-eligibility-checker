@@ -1,9 +1,31 @@
 import { useEffect, useRef } from 'react';
 
+/**
+ * Google Antigravity-Style Particle System
+ * 
+ * Architecture:
+ * - Cursor-centered localized simulation field (180-250px radius)
+ * - Particles are temporary visualizations of cursor energy, not persistent objects
+ * - Swirl/curl forces create bubble-like fluid motion
+ * - Density emerges from mouse velocity and acceleration
+ * - No particles exist when cursor is idle or outside influence
+ * 
+ * This is NOT a full-screen particle background.
+ * This IS a cursor-attached, rotating, energy-driven attention field.
+ */
+
 const BackgroundParticles = () => {
     const canvasRef = useRef(null);
-    const mouseRef = useRef({ x: 0, y: 0 });
     const particlesRef = useRef([]);
+    const mouseRef = useRef({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        vx: 0,
+        vy: 0,
+        prevX: window.innerWidth / 2,
+        prevY: window.innerHeight / 2,
+        prevTime: Date.now()
+    });
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -12,123 +34,245 @@ const BackgroundParticles = () => {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
 
-        // Set canvas size
+        // Respect reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+            return;
+        }
+
+        // Canvas setup with device pixel ratio for sharpness
         const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = `${window.innerWidth}px`;
+            canvas.style.height = `${window.innerHeight}px`;
+            ctx.scale(dpr, dpr);
         };
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Rainbow colors - vibrant mix
+        // VISUAL CONSTRAINTS: Muted palette (2-3 hues)
         const colors = [
-            '#FF6B6B', // Red
-            '#FF8E53', // Orange
-            '#FFC93C', // Yellow
-            '#6BCB77', // Green
-            '#4D96FF', // Blue
-            '#00E5FF', // Cyan
-            '#9D4EDD', // Purple
-            '#FF006E', // Pink
-            '#06FFA5', // Mint
-            '#FFBE0B'  // Gold
+            'rgba(0, 229, 255, 0.4)',   // Cyan
+            'rgba(147, 51, 234, 0.35)',  // Violet
+            'rgba(255, 255, 255, 0.3)'   // Soft white
         ];
 
-        // Particle class
-        class Particle {
-            constructor() {
-                this.reset();
-                this.y = Math.random() * canvas.height;
-                this.baseX = this.x;
-                this.baseY = this.y;
-            }
+        // PHYSICS CONSTANTS
+        const INFLUENCE_RADIUS = 220; // Localized field radius
+        const SPAWN_RADIUS = 40;      // How close to cursor particles spawn
+        const MIN_VELOCITY_THRESHOLD = 0.5; // Below this, no new particles
 
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.baseX = this.x;
-                this.baseY = this.y;
+        /**
+         * Particle Class
+         * - Short-lived (1-3 seconds)
+         * - No home position
+         * - No long-term identity
+         * - Disposable carriers of motion energy
+         */
+        class Particle {
+            constructor(x, y, energy) {
+                this.x = x;
+                this.y = y;
+                this.vx = 0;
+                this.vy = 0;
+
                 this.size = Math.random() * 2 + 1;
                 this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-                this.angle = Math.random() * Math.PI * 2;
+
+                // Short-lived with variable decay
+                this.life = 1.0;
+                this.maxLife = 1.0 + Math.random() * 2.0; // 1-3 seconds
+                this.decay = 1.0 / (this.maxLife * 60); // Assuming 60fps
+
+                this.opacity = 0;
+                this.targetOpacity = 0.6 + Math.random() * 0.4;
             }
 
-            update(mouse) {
-                // Gentle floating animation
-                this.baseX += this.speedX;
-                this.baseY += this.speedY;
-
-                // Wrap around screen
-                if (this.baseX < 0) this.baseX = canvas.width;
-                if (this.baseX > canvas.width) this.baseX = 0;
-                if (this.baseY < 0) this.baseY = canvas.height;
-                if (this.baseY > canvas.height) this.baseY = 0;
-
-                // Mouse interaction - particles move away from cursor
-                const dx = mouse.x - this.baseX;
-                const dy = mouse.y - this.baseY;
+            /**
+             * Apply Forces (WHY, not just WHAT)
+             * 
+             * Two force types create the bubble-like feel:
+             * 1. Radial Force: Mild attraction at medium distance, repulsion up close
+             * 2. Curl/Rotational Force: Creates the swirl - CRITICAL for fluid feel
+             * 
+             * Without curl, motion feels mechanical.
+             * With curl, motion feels like stirring liquid.
+             */
+            applyForces(mouseX, mouseY, mouseVx, mouseVy) {
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
-                const maxDistance = 150;
 
-                if (distance < maxDistance) {
-                    const force = (maxDistance - distance) / maxDistance;
-                    const angle = Math.atan2(dy, dx);
-                    this.x = this.baseX - Math.cos(angle) * force * 40;
-                    this.y = this.baseY - Math.sin(angle) * force * 40;
-                } else {
-                    // Smooth return to base position
-                    this.x += (this.baseX - this.x) * 0.1;
-                    this.y += (this.baseY - this.y) * 0.1;
+                if (distance < INFLUENCE_RADIUS && distance > 0.1) {
+                    const normalizedDx = dx / distance;
+                    const normalizedDy = dy / distance;
+
+                    // 1. RADIAL FORCE
+                    // Attraction at medium distance, repulsion up close
+                    let radialStrength;
+                    if (distance < 60) {
+                        // Close: gentle repulsion
+                        radialStrength = -0.3 * (60 - distance) / 60;
+                    } else {
+                        // Medium: mild attraction
+                        radialStrength = 0.15 * (1 - distance / INFLUENCE_RADIUS);
+                    }
+
+                    this.vx += normalizedDx * radialStrength;
+                    this.vy += normalizedDy * radialStrength;
+
+                    // 2. CURL/ROTATIONAL FORCE (Creates the swirl!)
+                    // Perpendicular to radial direction
+                    const curlStrength = 0.25 * (1 - distance / INFLUENCE_RADIUS);
+                    this.vx += -normalizedDy * curlStrength;
+                    this.vy += normalizedDx * curlStrength;
+
+                    // 3. MOUSE VELOCITY INFLUENCE
+                    // Particles inherit some of the cursor's motion energy
+                    const velocityInfluence = 0.02 * (1 - distance / INFLUENCE_RADIUS);
+                    this.vx += mouseVx * velocityInfluence;
+                    this.vy += mouseVy * velocityInfluence;
                 }
             }
 
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
+            update(mouseX, mouseY, mouseVx, mouseVy) {
+                // Apply physics forces
+                this.applyForces(mouseX, mouseY, mouseVx, mouseVy);
 
-                // Draw as small star/dash
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 8;
+                // Update position
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Drag (fluid resistance)
+                this.vx *= 0.96;
+                this.vy *= 0.96;
+
+                // Smooth fade in/out
+                if (this.opacity < this.targetOpacity) {
+                    this.opacity += 0.05;
+                } else {
+                    this.opacity += (this.targetOpacity - this.opacity) * 0.1;
+                }
+
+                // Decay life
+                this.life -= this.decay;
+            }
+
+            draw(ctx) {
+                if (this.life <= 0) return;
+
+                const alpha = this.life * this.opacity;
+
+                ctx.save();
+                ctx.globalAlpha = alpha;
+
+                // Soft bubble appearance
+                ctx.shadowBlur = 12;
                 ctx.shadowColor = this.color;
 
-                // Star shape (small dash/line)
+                // Draw as luminous dash/blob
+                ctx.fillStyle = this.color;
                 ctx.beginPath();
-                ctx.moveTo(-this.size * 2, 0);
-                ctx.lineTo(this.size * 2, 0);
-                ctx.lineWidth = this.size;
-                ctx.strokeStyle = this.color;
-                ctx.stroke();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
 
                 ctx.restore();
             }
+
+            isDead() {
+                return this.life <= 0;
+            }
+
+            isInRadius(mouseX, mouseY) {
+                const dx = this.x - mouseX;
+                const dy = this.y - mouseY;
+                return Math.sqrt(dx * dx + dy * dy) < INFLUENCE_RADIUS;
+            }
         }
 
-        // Create particles
-        const particleCount = 100;
-        particlesRef.current = Array.from({ length: particleCount }, () => new Particle());
-
-        // Mouse move handler
+        /**
+         * Mouse Movement Handler
+         * Calculates velocity and acceleration to determine energy injection
+         */
         const handleMouseMove = (e) => {
+            const currentTime = Date.now();
+            const dt = Math.max((currentTime - mouseRef.current.prevTime) / 1000, 0.016);
+
+            const dx = e.clientX - mouseRef.current.prevX;
+            const dy = e.clientY - mouseRef.current.prevY;
+
+            // Calculate velocity (energy proxy)
+            const vx = dx / dt;
+            const vy = dy / dt;
+            const velocity = Math.sqrt(vx * vx + vy * vy);
+
             mouseRef.current = {
                 x: e.clientX,
-                y: e.clientY
+                y: e.clientY,
+                vx: vx,
+                vy: vy,
+                velocity: velocity,
+                prevX: e.clientX,
+                prevY: e.clientY,
+                prevTime: currentTime
             };
+
+            // DENSITY EMERGES FROM MOUSE ENERGY
+            // Fast movement → more particles
+            // Slow movement → fewer particles
+            // Idle → no particles
+
+            if (velocity > MIN_VELOCITY_THRESHOLD) {
+                const energy = Math.min(velocity / 200, 1.5);
+                const particlesToSpawn = Math.floor(energy * 2) + (Math.random() < energy * 0.5 ? 1 : 0);
+
+                for (let i = 0; i < particlesToSpawn; i++) {
+                    // Spawn near cursor with randomness
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * SPAWN_RADIUS;
+                    const spawnX = e.clientX + Math.cos(angle) * distance;
+                    const spawnY = e.clientY + Math.sin(angle) * distance;
+
+                    particlesRef.current.push(new Particle(spawnX, spawnY, energy));
+                }
+            }
         };
 
         window.addEventListener('mousemove', handleMouseMove);
 
-        // Animation loop
+        /**
+         * Animation Loop
+         * - Updates only particles in influence radius
+         * - Removes dead particles
+         * - Pauses when tab inactive (handled by requestAnimationFrame)
+         */
         const animate = () => {
-            ctx.fillStyle = 'rgba(10, 14, 39, 0.05)'; // Dark fade for trails
+            // Gentle fade (not full clear)
+            ctx.fillStyle = 'rgba(10, 14, 39, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            particlesRef.current.forEach(particle => {
-                particle.update(mouseRef.current);
-                particle.draw();
+            const mouse = mouseRef.current;
+
+            // Update and draw only particles in influence radius
+            particlesRef.current = particlesRef.current.filter(particle => {
+                particle.update(mouse.x, mouse.y, mouse.vx, mouse.vy);
+
+                // Only draw if alive and in radius (LOCALIZED)
+                if (!particle.isDead() && particle.isInRadius(mouse.x, mouse.y)) {
+                    particle.draw(ctx);
+                    return true;
+                }
+
+                // Remove dead particles (automatic cleanup)
+                return !particle.isDead();
             });
+
+            // Performance: cap at 200 particles
+            if (particlesRef.current.length > 200) {
+                particlesRef.current = particlesRef.current.slice(-200);
+            }
 
             animationFrameId = requestAnimationFrame(animate);
         };
@@ -153,8 +297,7 @@ const BackgroundParticles = () => {
                 width: '100%',
                 height: '100%',
                 pointerEvents: 'none',
-                zIndex: 0,
-                opacity: 0.6
+                zIndex: 0
             }}
         />
     );

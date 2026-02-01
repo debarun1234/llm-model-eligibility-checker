@@ -35,7 +35,7 @@ const AboutScreen = ({ onBack }) => {
                 textShadow: '0 0 20px rgba(0, 229, 255, 0.5)',
                 fontSize: '2rem'
             }}>
-                LLM Eligibility Checker
+                Insight AI
             </h1>
 
             <div style={{ lineHeight: '1.8', color: 'var(--text-primary)' }}>
