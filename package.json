@@ -23,7 +23,7 @@
     "appId": "com.debarunghosh.insightai",
     "productName": "Insight AI",
     "directories": {
-      "output": "dist",
+      "output": "release",
       "buildResources": "build"
     },
     "files": [
@@ -36,26 +36,23 @@
       "target": [
         "nsis"
       ],
-      "icon": "build/icon.ico"
+      "icon": "build/icon.png"
     },
     "mac": {
       "target": [
         "dmg"
       ],
-      "icon": "build/icon.icns",
+      "icon": "build/icon.png",
       "category": "public.app-category.utilities"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico"
+      "createStartMenuShortcut": true
     },
     "dmg": {
-      "title": "Insight AI",
-      "icon": "build/icon.icns"
+      "title": "Insight AI"
     }
   },
   "dependencies": {
