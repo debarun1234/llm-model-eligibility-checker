@@ -265,7 +265,7 @@ const Download = () => {
                             <p className="text-gray-400 mb-8">For Apple Silicon & Intel Macs</p>
 
                             <a
-                                href="https://github.com/debarun1234/llm-model-eligibility-checker/releases/download/v1.0.1/Insight-AI-1.0.1-arm64.dmg"
+                                href="https://github.com/debarun1234/llm-model-eligibility-checker/releases/download/v1.0.1/Insight.AI-1.0.1-arm64.dmg"
                                 className="w-full btn-primary flex items-center justify-center gap-2 text-lg py-4"
                                 onClick={handleDownloadClick}
                             >
