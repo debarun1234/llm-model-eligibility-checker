@@ -64,7 +64,7 @@ const Navbar = () => {
                                 {link.name}
                             </NavLink>
                         ))}
-                        <div className="relative flex flex-col items-center">
+                        <div className="relative inline-flex flex-col items-center">
                             <NavLink
                                 to="/download"
                                 className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/50 transition-all text-sm font-medium flex items-center gap-2 relative z-10"
