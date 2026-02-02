@@ -183,7 +183,7 @@ const Download = () => {
                                 <DownloadIcon size={20} />
                                 Download .exe
                             </a>
-                            <p className="text-xs text-gray-500 text-center mt-4 mb-6">v1.0.1 • 301 MB • Installer</p>
+                            <p className="text-xs text-gray-500 text-center mt-4 mb-6">v1.0.1 • ~98 MB • Installer</p>
 
                             {/* SmartScreen Help Collapsible */}
                             <SmartScreenTip />
