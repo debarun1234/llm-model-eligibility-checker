@@ -1,4 +1,4 @@
-# 🤖 LLM Model Eligibility Checker
+# 🤖 LLM Model Eligibility Checker (Proj name: Insight AI)
 
 > **Find the perfect Large Language Model for your hardware**
 
