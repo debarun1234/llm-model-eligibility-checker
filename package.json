@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "AI-powered hardware analyzer for Local LLM compatibility",
   "author": "Insight AI",
-  "homepage": "https://insightai.app",
+  "homepage": "https://insight-ai.dev",
   "private": true,
   "type": "module",
   "main": "electron/main.js",
