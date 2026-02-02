@@ -79,26 +79,6 @@ const Carousel = () => {
 };
 
 const Home = () => {
-    const [latestVersion, setLatestVersion] = useState("v1.0.1"); // Default fallback
-
-    useEffect(() => {
-        const fetchVersion = async () => {
-            try {
-                const response = await fetch('https://api.github.com/repos/debarun1234/llm-model-eligibility-checker/releases/latest');
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.tag_name) {
-                        setLatestVersion(data.tag_name);
-                    }
-                }
-            } catch (error) {
-                console.error("Failed to fetch latest version", error);
-            }
-        };
-
-        fetchVersion();
-    }, []);
-
     return (
         <div className="relative pt-20">
             {/* Hero Section */}
@@ -107,14 +87,6 @@ const Home = () => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] animate-pulse-slow"></div>
 
                 <div className="relative max-w-5xl mx-auto text-center z-10">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8 }}
-                        className="inline-block mb-4 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium"
-                    >
-                        ✨ {latestVersion} Now Available
-                    </motion.div>
 
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
