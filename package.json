@@ -15,6 +15,7 @@
     "build": "vite build",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
+    "build:store": "npm run build && electron-builder --win appx",
     "build:all": "npm run build && electron-builder -mw",
     "pack": "electron-builder --dir",
     "lint": "eslint .",
@@ -38,6 +39,16 @@
         "nsis"
       ],
       "icon": "build/icon.png"
+    },
+    "appx": {
+      "applicationId": "InsightAI.Checker",
+      "identityName": "INSERT_IDENTITY_NAME_FROM_PARTNER_CENTER",
+      "publisher": "CN=INSERT_PUBLISHER_ID_FROM_PARTNER_CENTER",
+      "displayName": "Insight AI",
+      "publisherDisplayName": "Insight AI",
+      "languages": [
+        "en-US"
+      ]
     },
     "mac": {
       "target": [
