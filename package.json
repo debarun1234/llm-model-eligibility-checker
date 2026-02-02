@@ -3,7 +3,7 @@
   "productName": "Insight AI",
   "version": "1.0.0",
   "description": "AI-powered hardware analyzer for Local LLM compatibility",
-  "author": "Debarun Ghosh",
+  "author": "Insight AI",
   "private": true,
   "type": "module",
   "main": "electron/main.js",
@@ -20,7 +20,7 @@
     "preview": "vite preview"
   },
   "build": {
-    "appId": "com.debarunghosh.insightai",
+    "appId": "com.insightai.app",
     "productName": "Insight AI",
     "directories": {
       "output": "release",
