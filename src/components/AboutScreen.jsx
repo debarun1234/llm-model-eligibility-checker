@@ -141,6 +141,24 @@ const AboutScreen = ({ onBack }) => {
                         >
                             LinkedIn →
                         </a>
+                        <a
+                            href="https://insight-ai.dev"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                color: 'var(--accent-primary)',
+                                textDecoration: 'none',
+                                padding: '0.5rem 1rem',
+                                border: '1px solid var(--accent-primary)',
+                                borderRadius: '6px',
+                                fontSize: '0.9rem',
+                                transition: 'all 0.3s ease'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = 'var(--accent-primary)'}
+                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                        >
+                            Website →
+                        </a>
                     </div>
                 </div>
 
@@ -154,7 +172,14 @@ const AboutScreen = ({ onBack }) => {
                     color: 'var(--text-muted)',
                     textAlign: 'center'
                 }}>
-                    <strong>v1.0.0</strong> • MIT License • <a
+                    <strong>v1.0.1</strong> • MIT License • <a
+                        href="https://insight-ai.dev"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}
+                    >
+                        insight-ai.dev
+                    </a> • <a
                         href="https://github.com/debarun1234/llm-model-eligibility-checker"
                         target="_blank"
                         rel="noopener noreferrer"
