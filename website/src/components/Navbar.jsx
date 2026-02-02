@@ -75,9 +75,7 @@ const Navbar = () => {
 
                             {/* Bouncing Version Tag */}
                             <motion.div
-                                initial={{ opacity: 0, y: 0 }}
                                 animate={{
-                                    opacity: 1,
                                     y: [0, 5, 0]
                                 }}
                                 transition={{
@@ -85,7 +83,7 @@ const Navbar = () => {
                                     repeat: Infinity,
                                     ease: "easeInOut"
                                 }}
-                                className="absolute top-full mt-2 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1 rounded bg-black/80 border border-primary/30 text-primary text-[10px] font-bold shadow-lg whitespace-nowrap pointer-events-none"
+                                className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-max flex items-center gap-1 px-2 py-1 rounded bg-black/90 border border-primary/30 text-primary text-[10px] font-bold shadow-lg shadow-primary/10 pointer-events-none z-20"
                             >
                                 <ChevronDown size={10} className="stroke-[3] -rotate-180 absolute -top-3 left-1/2 -translate-x-1/2 text-primary" />
                                 <span>✨ {latestVersion} Available</span>
