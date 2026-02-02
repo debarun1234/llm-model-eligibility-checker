@@ -211,7 +211,6 @@ const ResultsScreen = ({ results, onRetry }) => {
                 }}
             >
                 <div style={{
-                    display: 'inline-block',
                     background: 'linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(98, 0, 255, 0.2))',
                     border: '2px solid var(--accent-primary)',
                     borderRadius: '10px',
