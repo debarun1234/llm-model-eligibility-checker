@@ -19,7 +19,9 @@ import {
     ChevronDown,
     Lock,
     HardDrive,
-    Gauge
+    Gauge,
+    Code as CodeIcon,
+    User
 } from 'lucide-react';
 import modelsData from '../../../src/data/models.json';
 
@@ -545,7 +547,7 @@ const Docs = () => {
                                                 <h4 className="text-xl font-bold text-green-400">🍎 Apple Silicon Path</h4>
 
                                                 <div className="p-4 rounded-lg bg-green-900/10 border border-green-500/20">
-                                                    <h5 className="font-bold text-green-300 mb-2">4️⃣ Unified Memory Model</h5>
+                                                    <h5 className="font-bold text-green-300 mb-2">4️⃣ Unified Model (RAM Checks)</h5>
                                                     <p className="text-sm text-gray-400">CPU, GPU, and Neural Engine share RAM pool—no fixed VRAM limit</p>
                                                 </div>
 
@@ -690,125 +692,87 @@ const Docs = () => {
                                 <div className="space-y-12">
                                     <Section title="Security & Impersonation" icon={Shield}>
                                         <p className="leading-relaxed mb-8 text-lg">
-                                            Insight AI balances deep system introspection with strict security boundaries.
-                                            Detailed below are the specific defenses coded into the <code className="text-primary">hardwareValidator.js</code> service
-                                            and <code className="text-primary">InputScreen.jsx</code> interface.
+                                            Insight AI implements a <strong>Hybrid Validation Model</strong>. While we trust users to declare their context (intent, chassis style), we strictly verify all execution-critical hardware specifications against the OS kernel.
                                         </p>
 
-                                        {/* Security Core Principles */}
+                                        {/* Hybrid Trust Model */}
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                                             <div className="p-6 rounded-xl bg-gradient-to-br from-green-500/10 to-green-500/5 border border-green-500/20">
                                                 <div className="flex items-center gap-3 mb-3">
                                                     <Lock className="text-green-400" size={24} />
-                                                    <h4 className="font-bold text-white text-lg">Authority of Truth</h4>
+                                                    <h4 className="font-bold text-white text-lg">Strictly Verified (Immutable)</h4>
                                                 </div>
-                                                <p className="text-sm text-gray-300 mb-3">
-                                                    <strong className="text-green-400">Rule:</strong> OS-detected hardware <em>always</em> overrides user inputs.
-                                                </p>
-                                                <p className="text-sm text-gray-400 leading-relaxed">
-                                                    Even if a user manually enables "Apple Silicon Mode" on the Input Screen, the <code className="text-xs bg-black/30 px-1 py-0.5 rounded text-green-300">hardwareValidator</code> service
-                                                    cross-references the actual CPU architecture. If an x64 instruction set is detected, the manual override is silently ignored to prevent architecture-mismatch crashes.
+                                                <ul className="list-disc list-inside space-y-2 text-sm text-gray-400">
+                                                    <li><strong>CPU Architecture:</strong> (Apple vs x86) Checked via OS.</li>
+                                                    <li><strong>System RAM:</strong> Total physical memory.</li>
+                                                    <li><strong>GPU Specs:</strong> VRAM, Model Name, Driver status.</li>
+                                                </ul>
+                                                <p className="text-xs text-gray-500 mt-4 italic">
+                                                    Attempting to lie about these in the Input Screen is futile; the Validator ignores your input and uses the Kernel's truth.
                                                 </p>
                                             </div>
 
-                                            <div className="p-6 rounded-xl bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20">
+                                            <div className="p-6 rounded-xl bg-gradient-to-br from-yellow-500/10 to-yellow-500/5 border border-yellow-500/20">
                                                 <div className="flex items-center gap-3 mb-3">
-                                                    <Shield className="text-blue-400" size={24} />
-                                                    <h4 className="font-bold text-white text-lg">Input Sanitization</h4>
+                                                    <User className="text-yellow-400" size={24} />
+                                                    <h4 className="font-bold text-white text-lg">User Trust (Mutable)</h4>
                                                 </div>
-                                                <p className="text-sm text-gray-300 mb-3">
-                                                    <strong className="text-blue-400">Rule:</strong> All manual inputs are clamped to physical realities.
-                                                </p>
-                                                <p className="text-sm text-gray-400 leading-relaxed">
-                                                    The Input Screen employs strict boundary checking. For example:
-                                                </p>
-                                                <ul className="list-disc list-inside mt-2 text-sm text-gray-500">
-                                                    <li>RAM cannot exceed 2048 GB (maximum consumer logic)</li>
-                                                    <li>VRAM cannot be negative</li>
-                                                    <li>Context lengths are snapped to power-of-2 standards</li>
+                                                <ul className="list-disc list-inside space-y-2 text-sm text-gray-400">
+                                                    <li><strong>Form Factor:</strong> (Laptop vs Desktop) Hard to detect reliably.</li>
+                                                    <li><strong>Usage Intent:</strong> (Coding vs Chat) Subjective preference.</li>
+                                                    <li><strong>Model Name:</strong> (e.g. "My Custom PC") Aesthetic only.</li>
                                                 </ul>
+                                                <p className="text-xs text-gray-500 mt-4 italic">
+                                                    You <em>can</em> lie about being on a Desktop to mitigate thermal scoring penalties, but you cannot fake having more RAM.
+                                                </p>
                                             </div>
                                         </div>
 
                                         <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                                             <AlertTriangle className="text-yellow-400" />
-                                            Impersonation Scenarios & Defenses
+                                            Impersonation Scenarios
                                         </h3>
 
                                         <div className="space-y-6">
                                             {/* Scenario 1 */}
-                                            <Collapsible title="Scenario 1: The 'Fake GPU' Injection" icon={Terminal} defaultOpen={true}>
+                                            <Collapsible title="Scenario 1: Lying about Architecture (Blocked)" icon={Cpu} defaultOpen={true}>
                                                 <p className="text-gray-300 mb-4">
-                                                    <strong>Attack Vector:</strong> A user attempts to trick the app into recommending high-end models by injecting a fake RTX 4090 object into the renderer capabilities.
+                                                    <strong>Attempt:</strong> A user on an Intel Laptop selects "Apple Silicon" in the UI to see if they can get unified memory scores.
                                                 </p>
-                                                <div className="p-4 rounded-lg bg-red-900/10 border border-red-500/20">
-                                                    <p className="font-bold text-red-400 mb-2">⛔ Defense Mechanism:</p>
-                                                    <ul className="list-disc list-inside space-y-2 text-sm text-gray-400">
-                                                        <li>
-                                                            <strong>Kernel-Level Query:</strong> The app does not trust the browser's <code>navigator.hardwareConcurrency</code> or WebGL renderer strings.
-                                                        </li>
-                                                        <li>
-                                                            <strong>Privileged Confirmation:</strong> Instead, it invokes the Main process via IPC to run a direct <code>systeminformation</code> call, which queries the Windows Registry or macOS IORegistry directly.
-                                                        </li>
-                                                        <li>
-                                                            <strong>Outcome:</strong> The injected JS object is ignored; the app renders recommendations for the <em>actual</em> integrated graphics.
-                                                        </li>
+                                                <div className="p-4 rounded-lg bg-green-900/10 border border-green-500/20">
+                                                    <p className="font-bold text-green-400 mb-2">🛡️ Defense:</p>
+                                                    <p className="text-sm text-gray-400">
+                                                        The <code className="text-green-300">InputScreen.jsx</code> validates your declaration against <code className="text-green-300">hardwareValidator.js</code> immediately.
+                                                    </p>
+                                                    <ul className="list-disc list-inside mt-2 text-sm text-gray-500">
+                                                        <li>Result: The UI shows a <strong>Validation Error</strong> and prevents submission.</li>
+                                                        <li>Even if bypassed, the engine logic (lines 64-70) detects the mismatch and forces the use of the <em>actual</em> CPU type.</li>
                                                     </ul>
                                                 </div>
                                             </Collapsible>
 
                                             {/* Scenario 2 */}
-                                            <Collapsible title="Scenario 2: Architecture Spoofing" icon={Cpu}>
+                                            <Collapsible title="Scenario 2: Lying about Form Factor (Allowed)" icon={Laptop}>
                                                 <p className="text-gray-300 mb-4">
-                                                    <strong>Attack Vector:</strong> An x64 Windows user tries to force 'Unified Memory' logic to get more lenient RAM recommendations.
+                                                    <strong>Attempt:</strong> A user on a generic laptop selects "Desktop Workstation" to avoid thermal throttling penalties.
                                                 </p>
-                                                <div className="p-4 rounded-lg bg-blue-900/10 border border-blue-500/20">
-                                                    <p className="font-bold text-blue-400 mb-2">🛡️ Validator Logic:</p>
-                                                    <p className="text-sm text-gray-400 mb-3">
-                                                        The validator checks <code className="text-blue-300">os.arch()</code> and vendor strings.
+                                                <div className="p-4 rounded-lg bg-yellow-900/10 border border-yellow-500/20">
+                                                    <p className="font-bold text-yellow-400 mb-2">⚠️ Outcome:</p>
+                                                    <p className="text-sm text-gray-400">
+                                                        <strong>Allowed.</strong> We trust this input because many Mini-PCs (NUCs, Mac Minis) appear as 'Mobile' chips to the OS but have desktop cooling.
                                                     </p>
-                                                    <div className="bg-black/30 p-3 rounded font-mono text-xs text-gray-400">
-                                                        if (claimed === 'Apple' && actual.vendor !== 'Apple') {'{'}<br />
-                                                        &nbsp;&nbsp;throw new SecurityError('Architecture Mismatch');<br />
-                                                        {'}'}
-                                                    </div>
+                                                    <p className="text-xs text-gray-500 mt-2">
+                                                        <em>Risk:</em> Your laptop might overheat if you force Desktop recommendations.
+                                                    </p>
                                                 </div>
                                             </Collapsible>
 
                                             {/* Scenario 3 */}
-                                            <Collapsible title="Scenario 3: Developer Mocking (Safe Impersonation)" icon={CodeBlock}>
+                                            <Collapsible title="Scenario 3: Developer Mocking" icon={Terminal}>
                                                 <p className="text-gray-300 mb-4">
-                                                    <strong>Context:</strong> Developers need to test how the UI behaves on a 128GB Mac Studio without owning one.
+                                                    Developers can inject a <code>mock_hardware.json</code> to test UI states. This file is <strong>physically excluded</strong> from production builds via the electron-builder configuration.
                                                 </p>
-                                                <div className="p-4 rounded-lg bg-purple-900/10 border border-purple-500/20">
-                                                    <p className="font-bold text-purple-400 mb-2">✅ Allowed Mechanism:</p>
-                                                    <p className="text-sm text-gray-400">
-                                                        The app supports a <code>mock_hardware.json</code> file injection <strong>only in development builds</strong>.
-                                                    </p>
-                                                    <ul className="list-disc list-inside mt-3 space-y-1 text-sm text-gray-500">
-                                                        <li>Production builds strip the mock loader entirely.</li>
-                                                        <li>This ensures end-users cannot accidentally or maliciously rely on fake specs.</li>
-                                                    </ul>
-                                                </div>
                                             </Collapsible>
-                                        </div>
-
-                                        <div className="mt-12 p-6 rounded-xl bg-white/5 border border-white/10">
-                                            <h4 className="font-bold text-white mb-4">Summary of Trust</h4>
-                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                                                <div className="p-4 rounded-lg bg-black/20">
-                                                    <div className="text-2xl mb-1">🚫</div>
-                                                    <p className="text-sm font-bold text-gray-300">No Telemetry</p>
-                                                </div>
-                                                <div className="p-4 rounded-lg bg-black/20">
-                                                    <div className="text-2xl mb-1">🔒</div>
-                                                    <p className="text-sm font-bold text-gray-300">Sandboxed UI</p>
-                                                </div>
-                                                <div className="p-4 rounded-lg bg-black/20">
-                                                    <div className="text-2xl mb-1">✅</div>
-                                                    <p className="text-sm font-bold text-gray-300">Kernel Verified</p>
-                                                </div>
-                                            </div>
                                         </div>
                                     </Section>
                                 </div>
