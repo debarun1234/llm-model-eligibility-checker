@@ -1,16 +1,30 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Menu, X, Download, Github } from 'lucide-react';
+import { Menu, X, Download, Github, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [latestVersion, setLatestVersion] = useState("v1.0.1");
     const location = useLocation();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
         window.addEventListener('scroll', handleScroll);
+
+        // Fetch latest version
+        const fetchVersion = async () => {
+            try {
+                const response = await fetch('https://api.github.com/repos/debarun1234/llm-model-eligibility-checker/releases/latest');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.tag_name) setLatestVersion(data.tag_name);
+                }
+            } catch (e) { console.error(e); }
+        };
+        fetchVersion();
+
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -50,13 +64,33 @@ const Navbar = () => {
                                 {link.name}
                             </NavLink>
                         ))}
-                        <NavLink
-                            to="/download"
-                            className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/50 transition-all text-sm font-medium flex items-center gap-2"
-                        >
-                            <Download size={16} />
-                            Get App
-                        </NavLink>
+                        <div className="relative group">
+                            <NavLink
+                                to="/download"
+                                className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/50 transition-all text-sm font-medium flex items-center gap-2 relative z-10"
+                            >
+                                <Download size={16} />
+                                Get App
+                            </NavLink>
+
+                            {/* Bouncing Version Tag */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 0 }}
+                                animate={{
+                                    opacity: 1,
+                                    y: [0, 5, 0]
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                                className="absolute top-full mt-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1 rounded bg-black/80 border border-primary/30 text-primary text-[10px] font-bold shadow-lg whitespace-nowrap pointer-events-none"
+                            >
+                                <ChevronDown size={10} className="stroke-[3] -rotate-180 absolute -top-3 left-1/2 -translate-x-1/2 text-primary" />
+                                <span>✨ {latestVersion} Available</span>
+                            </motion.div>
+                        </div>
                     </div>
 
                     {/* Mobile Menu Button */}

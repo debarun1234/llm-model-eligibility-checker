@@ -107,6 +107,15 @@ const Home = () => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] animate-pulse-slow"></div>
 
                 <div className="relative max-w-5xl mx-auto text-center z-10">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8 }}
+                        className="inline-block mb-4 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium"
+                    >
+                        ✨ {latestVersion} Now Available
+                    </motion.div>
+
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -126,36 +135,21 @@ const Home = () => {
                         Uses intelligent hardware analysis to recommend the best offline LLMs for your PC. Zero cloud dependencies. 100% Privacy.
                     </motion.p>
 
-                    <div className="flex flex-col items-center justify-center gap-4 relative">
-                        {/* Bouncing Version Tag */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{
-                                opacity: 1,
-                                y: [-10, 0, -10]
-                            }}
-                            transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="absolute -top-12 left-1/2 -translate-x-1/2 hidden sm:flex items-center gap-1 px-3 py-1 rounded-full border border-primary/30 bg-black/60 backdrop-blur-sm text-primary text-xs font-bold shadow-[0_0_15px_rgba(0,164,239,0.3)] whitespace-nowrap z-20 pointer-events-none"
-                        >
-                            <span>✨ {latestVersion} Available</span>
-                            <ChevronDown size={14} className="stroke-[3]" />
-                        </motion.div>
-
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-                            <Link to="/download" className="btn-primary flex items-center gap-2 group relative z-10">
-                                <Download size={20} />
-                                Download Now
-                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                            <Link to="/docs" className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-white font-medium flex items-center gap-2">
-                                How it Works
-                            </Link>
-                        </div>
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                    >
+                        <Link to="/download" className="btn-primary flex items-center gap-2 group">
+                            <Download size={20} />
+                            Download Now
+                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                        <Link to="/docs" className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-white font-medium flex items-center gap-2">
+                            How it Works
+                        </Link>
+                    </motion.div>
                 </div>
             </section>
 
