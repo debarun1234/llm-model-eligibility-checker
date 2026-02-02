@@ -177,13 +177,13 @@ const Download = () => {
                             <p className="text-gray-400 mb-8">Requires Windows 10 or 11 (64-bit)</p>
 
                             <a
-                                href="https://github.com/debarun1234/llm-model-eligibility-checker/releases/download/v1.0.0/Insight.AI.Setup.1.0.0.exe"
+                                href="https://github.com/debarun1234/llm-model-eligibility-checker/releases/download/v1.0.1/Insight.AI.Setup.1.0.1.exe"
                                 className="w-full btn-primary flex items-center justify-center gap-2 text-lg py-4"
                             >
                                 <DownloadIcon size={20} />
                                 Download .exe
                             </a>
-                            <p className="text-xs text-gray-500 text-center mt-4 mb-6">v1.0.0 • 301 MB • Installer</p>
+                            <p className="text-xs text-gray-500 text-center mt-4 mb-6">v1.0.1 • 301 MB • Installer</p>
 
                             {/* SmartScreen Help Collapsible */}
                             <SmartScreenTip />
@@ -209,13 +209,13 @@ const Download = () => {
                             <p className="text-gray-400 mb-8">For Apple Silicon & Intel Macs</p>
 
                             <a
-                                href="https://github.com/debarun1234/llm-model-eligibility-checker/releases/download/v1.0.0/Insight-AI-1.0.0-arm64.dmg"
+                                href="https://github.com/debarun1234/llm-model-eligibility-checker/releases/download/v1.0.1/Insight-AI-1.0.1-arm64.dmg"
                                 className="w-full btn-primary flex items-center justify-center gap-2 text-lg py-4"
                             >
                                 <DownloadIcon size={20} />
                                 Download .dmg
                             </a>
-                            <p className="text-xs text-gray-500 text-center mt-4">v1.0.0 • Universal Binary • Disk Image</p>
+                            <p className="text-xs text-gray-500 text-center mt-4">v1.0.1 • Universal Binary • Disk Image</p>
                         </div>
                     </motion.div>
                 </div>

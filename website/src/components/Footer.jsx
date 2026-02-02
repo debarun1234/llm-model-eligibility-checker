@@ -6,12 +6,12 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-6 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                     <div className="col-span-1 md:col-span-2">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary p-[1px]">
-                                <div className="w-full h-full bg-dark-bg rounded-lg flex items-center justify-center">
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-bold">I</span>
-                                </div>
-                            </div>
+                        <div className="flex items-center gap-3 mb-4">
+                            <img
+                                src="/logo.png"
+                                alt="Insight AI Logo"
+                                className="w-8 h-8 rounded-lg"
+                            />
                             <span className="text-xl font-bold text-white">Insight AI</span>
                         </div>
                         <p className="text-gray-400 text-sm max-w-sm leading-relaxed">
