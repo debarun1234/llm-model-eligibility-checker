@@ -43,35 +43,7 @@ const SmartScreenTip = () => {
     );
 };
 
-const LiveCounter = () => {
-    const [count, setCount] = useState(null);
-
-    useEffect(() => {
-        const fetchDownloads = async () => {
-            try {
-                const response = await fetch('https://api.github.com/repos/debarun1234/llm-model-eligibility-checker/releases');
-                const data = await response.json();
-                let totalDownloads = 0;
-                if (Array.isArray(data)) {
-                    data.forEach(release => {
-                        release.assets.forEach(asset => {
-                            totalDownloads += asset.download_count;
-                        });
-                    });
-                }
-                setCount(totalDownloads);
-            } catch (error) {
-                console.error("Failed to fetch download count", error);
-                setCount(null);
-            }
-        };
-
-        fetchDownloads();
-        // Refresh every minute
-        const interval = setInterval(fetchDownloads, 60000);
-        return () => clearInterval(interval);
-    }, []);
-
+const LiveCounter = ({ count }) => {
     return (
         <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
             <span className="relative flex h-2 w-2">
@@ -106,7 +78,6 @@ const FeedbackSection = () => {
         // Keep only last 15 comments
         setFeedback(prev => [newFeedback, ...prev].slice(0, 15));
         setInput("");
-        // Optional: clear name if needed, but keeping it is usually better UX
     };
 
     return (
@@ -184,6 +155,38 @@ const FeedbackSection = () => {
 };
 
 const Download = () => {
+    const [count, setCount] = useState(null);
+
+    useEffect(() => {
+        const fetchDownloads = async () => {
+            try {
+                const response = await fetch('https://api.github.com/repos/debarun1234/llm-model-eligibility-checker/releases');
+                const data = await response.json();
+                let totalDownloads = 0;
+                if (Array.isArray(data)) {
+                    data.forEach(release => {
+                        release.assets.forEach(asset => {
+                            totalDownloads += asset.download_count;
+                        });
+                    });
+                }
+                setCount(prev => (prev === null ? totalDownloads : Math.max(prev, totalDownloads)));
+            } catch (error) {
+                console.error("Failed to fetch download count", error);
+                if (count === null) setCount(0);
+            }
+        };
+
+        fetchDownloads();
+        const interval = setInterval(fetchDownloads, 60000); // Check every minute
+        return () => clearInterval(interval);
+    }, []);
+
+    const handleDownloadClick = () => {
+        // Optimistically increment count for immediate feedback
+        setCount(prev => (prev || 0) + 1);
+    };
+
     return (
         <div className="min-h-screen pt-32 pb-24 px-6 relative overflow-hidden">
             {/* Background elements */}
@@ -192,7 +195,7 @@ const Download = () => {
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="text-center mb-16">
                     <div className="flex justify-center mb-6">
-                        <LiveCounter />
+                        <LiveCounter count={count} />
                     </div>
                     <h1 className="text-4xl md:text-6xl font-bold mb-6">
                         Get{' '}
@@ -231,6 +234,7 @@ const Download = () => {
                             <a
                                 href="https://github.com/debarun1234/llm-model-eligibility-checker/releases/download/v1.0.1/Insight.AI.Setup.1.0.1.exe"
                                 className="w-full btn-primary flex items-center justify-center gap-2 text-lg py-4"
+                                onClick={handleDownloadClick}
                             >
                                 <DownloadIcon size={20} />
                                 Download .exe
@@ -263,6 +267,7 @@ const Download = () => {
                             <a
                                 href="https://github.com/debarun1234/llm-model-eligibility-checker/releases/download/v1.0.1/Insight-AI-1.0.1-arm64.dmg"
                                 className="w-full btn-primary flex items-center justify-center gap-2 text-lg py-4"
+                                onClick={handleDownloadClick}
                             >
                                 <DownloadIcon size={20} />
                                 Download .dmg
