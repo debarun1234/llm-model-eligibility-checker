@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --glass-border: rgba(0, 229, 255, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+  }
+
+  body {
+    @apply bg-dark-bg text-white font-sans overflow-x-hidden;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(0, 229, 255, 0.25) 0%, transparent 60%),
+      radial-gradient(circle at 85% 80%, rgba(147, 51, 234, 0.20) 0%, transparent 60%),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/5 border border-white/10 shadow-xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/50 text-white font-medium transition-all duration-300 hover:border-primary active:scale-95;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+  }
+}
