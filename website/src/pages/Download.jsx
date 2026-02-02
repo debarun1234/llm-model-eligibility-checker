@@ -44,14 +44,31 @@ const SmartScreenTip = () => {
 };
 
 const LiveCounter = () => {
-    const [count, setCount] = useState(1248);
+    const [count, setCount] = useState(null);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (Math.random() > 0.6) {
-                setCount(prev => prev + 1);
+        const fetchDownloads = async () => {
+            try {
+                const response = await fetch('https://api.github.com/repos/debarun1234/llm-model-eligibility-checker/releases');
+                const data = await response.json();
+                let totalDownloads = 0;
+                if (Array.isArray(data)) {
+                    data.forEach(release => {
+                        release.assets.forEach(asset => {
+                            totalDownloads += asset.download_count;
+                        });
+                    });
+                }
+                setCount(totalDownloads);
+            } catch (error) {
+                console.error("Failed to fetch download count", error);
+                setCount(null);
             }
-        }, 3000);
+        };
+
+        fetchDownloads();
+        // Refresh every minute
+        const interval = setInterval(fetchDownloads, 60000);
         return () => clearInterval(interval);
     }, []);
 
@@ -61,71 +78,106 @@ const LiveCounter = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            {count.toLocaleString()} Downloads & Counting
+            {count !== null ? count.toLocaleString() : "..."} Total Downloads
         </div>
     );
 };
 
 const FeedbackSection = () => {
-    const [feedback, setFeedback] = useState([
-        { id: 1, user: "Alex Chen", text: "Finally! No more OOM errors. This saved me hours.", time: "2m ago" },
-        { id: 2, user: "Sarah J.", text: "The UI looks insane. Love the rainbow circuits!", time: "5m ago" },
-        { id: 3, user: "DevBot_99", text: "Works perfectly on my 3090. Llama 3 70B fits!", time: "12m ago" },
-    ]);
+    // Initial empty state (no dummy comments)
+    const [feedback, setFeedback] = useState([]);
     const [input, setInput] = useState("");
+    const [name, setName] = useState("");
+    const [isAnonymous, setIsAnonymous] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!input.trim()) return;
 
+        const userName = isAnonymous ? "Anonymous User" : (name.trim() || "Guest User");
+
         const newFeedback = {
             id: Date.now(),
-            user: "Anonymous User",
+            user: userName,
             text: input,
             time: "Just now"
         };
 
-        setFeedback([newFeedback, ...feedback]);
+        // Keep only last 15 comments
+        setFeedback(prev => [newFeedback, ...prev].slice(0, 15));
         setInput("");
+        // Optional: clear name if needed, but keeping it is usually better UX
     };
 
     return (
         <div className="mt-24 max-w-3xl mx-auto">
             <h3 className="text-2xl font-bold mb-6 text-center">Community Feedback</h3>
 
-            <form onSubmit={handleSubmit} className="mb-8 relative">
-                <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Share your thoughts..."
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:outline-none focus:border-primary/50 transition-colors pr-12"
-                />
-                <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                    <Send size={20} />
-                </button>
+            <form onSubmit={handleSubmit} className="mb-8 bg-white/5 p-4 rounded-2xl border border-white/10">
+                <div className="flex flex-col gap-4">
+                    <div className="flex gap-4 items-center">
+                        <div className="flex-1">
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder="Your Name (Optional)"
+                                disabled={isAnonymous}
+                                className={`w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary/50 transition-colors ${isAnonymous ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            />
+                        </div>
+                        <label className="flex items-center gap-2 cursor-pointer select-none">
+                            <input
+                                type="checkbox"
+                                checked={isAnonymous}
+                                onChange={(e) => setIsAnonymous(e.target.checked)}
+                                className="w-4 h-4 rounded border-white/30 bg-black/20 text-primary focus:ring-primary"
+                            />
+                            <span className="text-sm text-gray-400">Be Anonymous</span>
+                        </label>
+                    </div>
+
+                    <div className="relative">
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Share your thoughts..."
+                            className="w-full bg-black/20 border border-white/10 rounded-xl px-5 py-4 focus:outline-none focus:border-primary/50 transition-colors pr-12"
+                        />
+                        <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors">
+                            <Send size={20} />
+                        </button>
+                    </div>
+                </div>
             </form>
 
             <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                {feedback.map((item) => (
-                    <motion.div
-                        key={item.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="glass-card p-4 rounded-xl border border-white/5 flex gap-4"
-                    >
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center shrink-0">
-                            <User size={20} className="text-gray-400" />
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="font-medium text-white">{item.user}</span>
-                                <span className="text-xs text-gray-500">{item.time}</span>
+                {feedback.length === 0 ? (
+                    <div className="text-center text-gray-500 py-8">
+                        No comments yet. Be the first to share your thoughts!
+                    </div>
+                ) : (
+                    feedback.map((item) => (
+                        <motion.div
+                            key={item.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="glass-card p-4 rounded-xl border border-white/5 flex gap-4"
+                        >
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center shrink-0">
+                                <User size={20} className="text-gray-400" />
                             </div>
-                            <p className="text-gray-300 text-sm">{item.text}</p>
-                        </div>
-                    </motion.div>
-                ))}
+                            <div>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <span className="font-medium text-white">{item.user}</span>
+                                    <span className="text-xs text-gray-500">{item.time}</span>
+                                </div>
+                                <p className="text-gray-300 text-sm">{item.text}</p>
+                            </div>
+                        </motion.div>
+                    ))
+                )}
             </div>
         </div>
     );
