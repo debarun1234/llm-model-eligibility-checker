@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, Cpu, Activity, BarChart3, ArrowRight } from 'lucide-react';
+import { Download, Cpu, Activity, BarChart3, ArrowRight, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import GlowingParticles from '../components/GlowingParticles';
 
@@ -87,14 +87,6 @@ const Home = () => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] animate-pulse-slow"></div>
 
                 <div className="relative max-w-5xl mx-auto text-center z-10">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8 }}
-                        className="inline-block mb-4 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-sm font-medium"
-                    >
-                        ✨ V1.0.0 Now Available
-                    </motion.div>
 
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
