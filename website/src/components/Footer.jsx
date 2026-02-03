@@ -43,7 +43,7 @@ const Footer = () => {
                 </div>
 
                 <div className="border-t border-white/5 pt-8 text-center text-sm text-gray-500">
-                    <p>&copy; {new Date().getFullYear()} Insight AI. Built with ❤️ by Debarun Ghosh.</p>
+                    <p>&copy; {new Date().getFullYear()} Insight AI. Deployed and secured by Cloudflare.</p>
                 </div>
             </div>
         </footer>
