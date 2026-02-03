@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Cpu, Activity, BarChart3, ArrowRight, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -79,6 +79,32 @@ const Carousel = () => {
 };
 
 const Home = () => {
+    const videoRef = useRef(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (videoRef.current) {
+                    if (entry.isIntersecting) {
+                        videoRef.current.play().catch(() => { });
+                    } else {
+                        videoRef.current.pause();
+                    }
+                }
+            },
+            { threshold: 0.5 }
+        );
+
+        if (videoRef.current) {
+            observer.observe(videoRef.current);
+        }
+
+        return () => {
+            if (videoRef.current) {
+                observer.unobserve(videoRef.current);
+            }
+        };
+    }, []);
     return (
         <div className="relative pt-20">
             {/* Hero Section */}
@@ -121,6 +147,44 @@ const Home = () => {
                         <Link to="/docs" className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-white font-medium flex items-center gap-2">
                             How it Works
                         </Link>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Demo Video Section */}
+            <section className="py-10 relative z-10">
+                <div className="max-w-6xl mx-auto px-6 relative">
+                    {/* Ambient Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 rounded-full blur-[100px] -z-10"></div>
+
+                    <div className="text-center mb-10">
+                        <h2 className="text-3xl md:text-5xl font-bold mb-4">
+                            See It In <span className="text-gradient">Action</span>
+                        </h2>
+                        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                            Watch how Insight AI benchmarks your exact hardware configuration in seconds—completely offline.
+                        </p>
+                    </div>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="glass-card p-3 rounded-2xl border border-white/10 shadow-2xl shadow-primary/10 bg-black/40 backdrop-blur-xl"
+                    >
+                        <video
+                            ref={videoRef}
+                            src="/assets/demo.mp4"
+                            controls
+                            muted
+                            loop
+                            playsInline
+                            className="w-full rounded-xl shadow-lg"
+                            poster="/images/results_screen.png"
+                        >
+                            Your browser does not support the video tag.
+                        </video>
                     </motion.div>
                 </div>
             </section>
