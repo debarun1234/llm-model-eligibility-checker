@@ -692,7 +692,7 @@ const Docs = () => {
                                 <div className="space-y-12">
                                     <Section title="Security & Impersonation" icon={Shield}>
                                         <p className="leading-relaxed mb-8 text-lg">
-                                            Insight AI implements a <strong>Hybrid Validation Model</strong>. While we trust users to declare their context (intent, chassis style), we strictly verify all execution-critical hardware specifications against the OS kernel.
+                                            Insight AI implements a <strong>Hybrid Validation Model (v2)</strong>. While we trust users to declare their context (intent, chassis style), we strictly verify all execution-critical hardware specifications against the OS kernel.
                                         </p>
 
                                         {/* Hybrid Trust Model */}
@@ -876,3 +876,5 @@ const Docs = () => {
 };
 
 export default Docs;
+
+// Force Rebuild: 20260203-153312
