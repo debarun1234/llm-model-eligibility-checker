@@ -144,15 +144,18 @@ const Home = () => {
                             Download Now
                             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                         </Link>
-                        <Link to="/docs" className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-white font-medium flex items-center gap-2">
+                        <button
+                            onClick={() => document.getElementById('demo-video')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-white font-medium flex items-center gap-2"
+                        >
                             How it Works
-                        </Link>
+                        </button>
                     </motion.div>
                 </div>
             </section>
 
             {/* Demo Video Section */}
-            <section className="py-10 relative z-10">
+            <section id="demo-video" className="py-10 relative z-10">
                 <div className="max-w-6xl mx-auto px-6 relative">
                     {/* Ambient Glow */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 rounded-full blur-[100px] -z-10"></div>
